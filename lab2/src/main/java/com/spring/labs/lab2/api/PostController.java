@@ -44,8 +44,9 @@ public class PostController {
 
 	@PutMapping("/{id}")
 	public void updatePost(@PathVariable Long id, @RequestParam(required = false) String content,
-			@RequestParam(required = false) int upvotes, @RequestParam(required = false) int downvotes) {
-		postService.updatePost(id, content, upvotes, downvotes);
+			@RequestParam(required = false) String name, @RequestParam(required = false) int upvotes,
+			@RequestParam(required = false) int downvotes) {
+		postService.updatePost(id, content, name, upvotes, downvotes);
 	}
 
 	@DeleteMapping("/{id}")

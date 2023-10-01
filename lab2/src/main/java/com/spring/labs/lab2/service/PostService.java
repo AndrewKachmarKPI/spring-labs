@@ -38,11 +38,14 @@ public class PostService {
 	}
 
 	@Transactional
-	public void updatePost(Long id, String content, int upvotes, int downvotes) {
+	public void updatePost(Long id, String content, String name, int upvotes, int downvotes) {
 		Post post = postRepository.findById(id)
 				.orElseThrow(() -> new IllegalStateException("Post with " + id + " does not exist"));
 		if (content != null && content.length() > 0) {
 			post.setContent(content);
+		}
+		if (name != null && name.length() > 0) {
+			post.setName(name);
 		}
 		if (upvotes >= 0) {
 			post.setUpvotes(upvotes);
@@ -50,6 +53,6 @@ public class PostService {
 		if (downvotes >= 0) {
 			post.setDownvotes(downvotes);
 		}
-	}
 
+	}
 }

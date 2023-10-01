@@ -3,21 +3,33 @@ package com.spring.labs.lab2.domain;
 import java.time.LocalDate;
 import java.util.Objects;
 
-import lombok.NonNull;
+import org.springframework.data.annotation.Id;
 
 public class Post {
-
-	@NonNull
+	@Id
 	private Long id;
-//  TODO write the logic for Topic
-//	private Topic topic;
-//  TODO write the logic for Author
-//  private User author; 
+//  TODO write the logic for Topics
+//	private List<Topic> topics;
+//  TODO write the logic for Authors
+//  private List<User> authors; 
+	private String name;
 	private String content;
 	private LocalDate creationDate;
 	private int upvotes;
 	private int downvotes;
-//  private Topic parentTopic;  ???
+
+	public Post() {
+	}
+
+	public Post(Long id, String name, String content, LocalDate creationDate, int upvotes, int downvotes) {
+		super();
+		this.id = id;
+		this.name = name;
+		this.content = content;
+		this.creationDate = creationDate;
+		this.upvotes = upvotes;
+		this.downvotes = downvotes;
+	}
 
 	public Long getId() {
 		return id;
@@ -59,15 +71,23 @@ public class Post {
 		this.downvotes = downvotes;
 	}
 
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
 	@Override
 	public String toString() {
-		return "Post [id=" + id + ", content=" + content + ", creationDate=" + creationDate + ", upvotes=" + upvotes
-				+ ", downvotes=" + downvotes + "]";
+		return "Post [id=" + id + ", name=" + name + ", content=" + content + ", creationDate=" + creationDate
+				+ ", upvotes=" + upvotes + ", downvotes=" + downvotes + "]";
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(content, creationDate, downvotes, id, upvotes);
+		return Objects.hash(content, creationDate, downvotes, id, name, upvotes);
 	}
 
 	@Override
@@ -80,6 +100,7 @@ public class Post {
 			return false;
 		Post other = (Post) obj;
 		return Objects.equals(content, other.content) && Objects.equals(creationDate, other.creationDate)
-				&& downvotes == other.downvotes && Objects.equals(id, other.id) && upvotes == other.upvotes;
+				&& downvotes == other.downvotes && Objects.equals(id, other.id) && Objects.equals(name, other.name)
+				&& upvotes == other.upvotes;
 	}
 }
