@@ -1,16 +1,26 @@
 package com.spring.labs.lab2.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import jakarta.validation.constraints.*;
+import lombok.*;
 
-@Getter
-@AllArgsConstructor
+@Data
+@EqualsAndHashCode
 @NoArgsConstructor
+@AllArgsConstructor
 @Builder(toBuilder = true)
 public class CreateForumCategoryDto {
+    @NotNull
+    @NotBlank
+    @Size(min = 3, max = 50)
+    @Pattern(regexp = "^[a-zA-Z0-9. ]+$")
     private String categoryName;
+    @NotNull
+    @NotBlank
+    @Size(min = 10, max = 500)
+    @Pattern(regexp = "^[a-zA-Z0-9.\n ]+$")
     private String description;
+    @NotNull
+    @NotBlank
+    @Pattern(regexp = "^[a-zA-Z0-9.]+$")
     private String username;
 }

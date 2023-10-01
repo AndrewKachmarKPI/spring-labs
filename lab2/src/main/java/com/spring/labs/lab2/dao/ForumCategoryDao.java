@@ -14,6 +14,4 @@ public interface ForumCategoryDao {
     boolean existByName(String categoryName);
 
     void removeByName(String categoryName);
-
-    void generateDefaultCategories(Integer size);
 }

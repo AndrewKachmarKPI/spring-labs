@@ -1,14 +1,14 @@
 package com.spring.labs.lab2.dao;
 
-import com.github.javafaker.Faker;
 import com.spring.labs.lab2.domain.ForumCategory;
 import lombok.RequiredArgsConstructor;
+import net.datafaker.Faker;
 import org.springframework.stereotype.Repository;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.*;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
@@ -16,8 +16,7 @@ import java.util.stream.Stream;
 @Repository
 @RequiredArgsConstructor
 public class FakeForumCategoryDao implements ForumCategoryDao {
-    private final Faker faker;
-    private Map<String, ForumCategory> categories = new HashMap<>();
+    private final Map<String, ForumCategory> categories = new HashMap<>();
 
     @Override
     public ForumCategory save(ForumCategory forumCategory) {
@@ -27,7 +26,7 @@ public class FakeForumCategoryDao implements ForumCategoryDao {
 
     @Override
     public List<ForumCategory> findAll() {
-        return categories.values().stream().toList();
+        return categories.values().stream().sorted(Comparator.comparing(ForumCategory::getCreated).reversed()).toList();
     }
 
     @Override
@@ -49,15 +48,5 @@ public class FakeForumCategoryDao implements ForumCategoryDao {
             throw new RuntimeException("Category is not found");
         }
         categories.remove(categoryName);
-    }
-
-    @Override
-    public void generateDefaultCategories(Integer size) {
-        List<String> categoryNames = Stream.generate(() -> faker.lorem().sentence(2)).distinct().limit(size).toList();
-        categories = IntStream.range(1, size).mapToObj(index -> ForumCategory.builder()
-                .id((long) index)
-                .categoryName(categoryNames.get(index))
-                .description(faker.lorem().sentence())
-                .build()).collect(Collectors.toMap(ForumCategory::getCategoryName, category -> category));
     }
 }
