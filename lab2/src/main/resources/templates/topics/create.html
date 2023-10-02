@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="layout/layout">
+<head>
+    <meta charset="UTF-8">
+    <title>Create topic</title>
+</head>
+<body>
+<div layout:fragment="content">
+
+    <div class="alert alert-danger alert-dismissible fade show" role="alert" th:if="${errorMessage}">
+        <span th:text="${errorMessage}"></span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+
+    <div class="card">
+        <div class="card-body">
+            <form th:object="${topic}"
+                  th:action="@{/topic/create}"
+                  method="post">
+                <input type="text" class="d-none" th:if="${topicId!=null}" th:name="topicId" th:value="${topicId}"/>
+                <div class="mb-3">
+                    <label for="topicTitle" class="form-label">Title</label>
+                    <input id="topicTitle" type="text" class="form-control"
+                           th:field="*{topicTitle}" required>
+                    <small th:if="${#fields.hasErrors('topictitle')}"
+                           th:errors="*{topicTitle}"
+                           th:text="${#strings.listJoin(#fields.errors('topicTitle'), ', ')}" class="text-danger">
+                        Please provide a valid title.
+                    </small>
+                </div>
+                <div class="mb-3">
+                    <label for="content" class="form-label">Content</label>
+                    <textarea class="form-control" id="content" required th:field="*{content}"></textarea>
+                    <small th:if="${#fields.hasErrors('content')}"
+                           th:errors="*{content}"
+                           th:text="${#strings.listJoin(#fields.errors('content'), ', ')}" class="text-danger">
+                        Please provide a valid content.
+                    </small>
+                </div>
+                <div class="mb-3">
+                    <label for="author" class="form-label">Author</label>
+                    <select class="form-select" id="author" th:field="*{username}">
+                        <option th:each="user :${users}"
+                                th:value="${user.username}"
+                                th:text="${user.username}"></option>
+                    </select>
+                    <small th:if="${#fields.hasErrors('username')}"
+                           th:errors="*{username}"
+                           th:text="${#strings.listJoin(#fields.errors('username'), ', ')}" class="text-danger">
+                        Please select an author.
+                    </small>
+                </div>
+                <div class="mb-3">
+                    <label for="category" class="form-label">Category</label>
+                    <select class="form-select" id="category" th:field="*{category}">
+                        <option th:each="category :${categories}"
+                                th:value="${category.categoryname}"
+                                th:text="${category.categoryname}"></option>
+                    </select>
+                    <small th:if="${#fields.hasErrors('category')}"
+                           th:errors="*{categoryname}"
+                           th:text="${#strings.listJoin(#fields.errors('category'), ', ')}" class="text-danger">
+                        Please select a category.
+                    </small>
+                </div>
+                <button type="submit" class="btn btn-success">Submit</button>
+            </form>
+        </div>
+    </div>
+
+
+</div>
+</body>
+</html>
