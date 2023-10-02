@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
@@ -41,8 +42,8 @@ public class ForumCategoryServiceImpl implements ForumCategoryService {
     }
 
     @Override
-    public ForumCategory update(CreateForumCategoryDto createForumCategory, String categoryName) {
-        ForumCategory forumCategory = findByName(categoryName);
+    public ForumCategory update(CreateForumCategoryDto createForumCategory, Long categoryId) {
+        ForumCategory forumCategory = findById(categoryId);
         forumCategory = forumCategory.toBuilder()
                 .description(createForumCategory.getDescription())
                 .categoryName(createForumCategory.getCategoryName())
@@ -67,6 +68,11 @@ public class ForumCategoryServiceImpl implements ForumCategoryService {
     }
 
     @Override
+    public ForumCategory findById(Long id) {
+        return dao.findById(id);
+    }
+
+    @Override
     public ForumCategory changeModerator(String categoryName, String username) {
         ForumCategory forumCategory = findByName(categoryName);
         User user = userService.findUserByName(username);
@@ -81,8 +87,7 @@ public class ForumCategoryServiceImpl implements ForumCategoryService {
         List<String> categoryNames = Stream.generate(() -> faker.lorem().sentence(2)).distinct().limit(size + 1).toList();
         List<String> usernames = userService.findAll().stream().map(User::getUsername).toList();
         IntStream.range(1, size + 1).mapToObj(index -> ForumCategory.builder()
-                .id((long) index)
-                .created(LocalDateTime.now())
+                .created(LocalDateTime.now().minusDays(new Random().nextInt(0, 3)))
                 .categoryName(categoryNames.get(index))
                 .description(faker.lorem().sentence())
                 .backgroundImage(faker.internet().image(640, 200, new Random().toString()))

@@ -20,7 +20,12 @@ public class FakeForumCategoryDao implements ForumCategoryDao {
 
     @Override
     public ForumCategory save(ForumCategory forumCategory) {
-        forumCategory = forumCategory.toBuilder().id((long) categories.size() + 1).build();
+        if (Optional.ofNullable(forumCategory.getId()).isEmpty()) {
+            forumCategory = forumCategory.toBuilder().id((long) categories.size() + 1).build();
+        } else {
+            ForumCategory category = findById(forumCategory.getId());
+            categories.remove(category.getCategoryName());
+        }
         return categories.put(forumCategory.getCategoryName(), forumCategory);
     }
 
@@ -35,6 +40,13 @@ public class FakeForumCategoryDao implements ForumCategoryDao {
             throw new RuntimeException("Category is not found");
         }
         return categories.get(categoryName);
+    }
+
+    @Override
+    public ForumCategory findById(Long id) {
+        return categories.values().stream()
+                .filter(category -> category.getId().equals(id)).findAny()
+                .orElseThrow(() -> new RuntimeException("Category with id:" + id + " is not found"));
     }
 
     @Override

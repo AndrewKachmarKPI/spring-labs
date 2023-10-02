@@ -33,8 +33,10 @@
         <div class="col-lg-4 col-md-6 col-sm-12" th:each="category: ${categories}" th:unless="${categories.isEmpty()}">
             <div class="card h-100 shadow-sm">
                 <div class="position-relative">
-                    <small th:if="${category.created == category.created.now()}"
-                           class="px-2 py-1 m-2 end-0 fw-semibold text-success-emphasis bg-success-subtle border border-success-subtle rounded-2 position-absolute">NEW</small>
+                    <small th:if="${category.created.toLocalDate() == category.created.now().toLocalDate()}"
+                           class="px-2 py-1 m-2 end-0 fw-semibold text-success-emphasis bg-success-subtle border border-success-subtle rounded-2 position-absolute">
+                        NEW
+                    </small>
                     <img th:src="${category.backgroundImage}" class="card-img-top" alt="Card Image">
                 </div>
 
@@ -65,7 +67,7 @@
                             <div class="btn-group">
                                 <button type="button" class="btn btn-sm btn-outline-secondary">View topics</button>
                                 <a type="button" class="btn btn-sm btn-outline-success"
-                                   th:href="@{/categories/create/{categoryName}(categoryName = ${category.categoryName})}">Edit</a>
+                                   th:href="@{/categories/create/{categoryId}(categoryId = ${category.id})}">Edit</a>
                                 <button type="submit" class="btn btn-sm btn-outline-danger">Remove</button>
                             </div>
                         </form>

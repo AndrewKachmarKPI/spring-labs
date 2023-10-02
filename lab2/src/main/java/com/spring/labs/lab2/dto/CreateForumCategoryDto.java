@@ -3,7 +3,8 @@ package com.spring.labs.lab2.dto;
 import jakarta.validation.constraints.*;
 import lombok.*;
 
-@Data
+@Getter
+@Setter
 @EqualsAndHashCode
 @NoArgsConstructor
 @AllArgsConstructor

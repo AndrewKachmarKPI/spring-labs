@@ -10,13 +10,14 @@ import java.util.List;
 public interface ForumCategoryService {
     ForumCategory create(CreateForumCategoryDto forumCategory);
 
-    ForumCategory update(CreateForumCategoryDto forumCategory, String categoryName);
+    ForumCategory update(CreateForumCategoryDto forumCategory, Long categoryId);
 
     List<ForumCategory> findAll();
 
     void deleteByName(String categoryName);
 
     ForumCategory findByName(String categoryName);
+    ForumCategory findById(Long id);
 
     ForumCategory changeModerator(String categoryName, String username);
 

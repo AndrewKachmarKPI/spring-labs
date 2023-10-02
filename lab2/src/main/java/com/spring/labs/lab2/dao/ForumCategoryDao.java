@@ -11,6 +11,8 @@ public interface ForumCategoryDao {
 
     ForumCategory findByName(String categoryName);
 
+    ForumCategory findById(Long id);
+
     boolean existByName(String categoryName);
 
     void removeByName(String categoryName);

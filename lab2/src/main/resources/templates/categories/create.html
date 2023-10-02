@@ -18,6 +18,7 @@
             <form th:object="${category}"
                   th:action="@{/categories/create}"
                   method="post">
+                <input type="text" class="d-none" th:if="${categoryId!=null}" th:name="categoryId" th:value="${categoryId}"/>
                 <div class="mb-3">
                     <label for="categoryName" class="form-label">Name</label>
                     <input id="categoryName" type="text" class="form-control"

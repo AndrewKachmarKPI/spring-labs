@@ -22,37 +22,38 @@ public class CategoryController {
     @Autowired
     private UserService userService;
 
-    @GetMapping({"/create", "/create/{categoryName}"})
-    public ModelAndView createForm(@PathVariable("categoryName") String categoryName) {
+    @GetMapping({"/create", "/create/{categoryId}"})
+    public ModelAndView createForm(@PathVariable(value = "categoryId", required = false) Long categoryId) {
         ModelAndView modelAndView = new ModelAndView("categories/create");
         modelAndView.addObject("category", new CreateForumCategoryDto());
         modelAndView.addObject("users", userService.findAll());
-        if (Optional.ofNullable(categoryName).isPresent()) {
-            ForumCategory forumCategory = forumCategoryService.findByName(categoryName);
+        if (Optional.ofNullable(categoryId).isPresent()) {
+            ForumCategory forumCategory = forumCategoryService.findById(categoryId);
             CreateForumCategoryDto createForumCategoryDto = CreateForumCategoryDto.builder()
                     .categoryName(forumCategory.getCategoryName())
                     .description(forumCategory.getDescription())
                     .username(forumCategory.getModerator().getUsername())
                     .build();
             modelAndView.addObject("category", createForumCategoryDto);
-            modelAndView.addObject("categoryName", categoryName);
+            modelAndView.addObject("categoryId", categoryId);
         }
         return modelAndView;
     }
 
-    @PostMapping("/create")
-    public ModelAndView create(@Valid @ModelAttribute("category") CreateForumCategoryDto category,
-                               BindingResult bindingResult, Model model) {
+    @PostMapping({"/create"})
+    public ModelAndView create(@Valid @ModelAttribute("category") CreateForumCategoryDto category, BindingResult bindingResult,
+                               @RequestParam(value = "categoryId", required = false) Long categoryId) {
         ModelAndView modelAndView = new ModelAndView("categories/create");
         if (bindingResult.hasFieldErrors()) {
             return modelAndView.addObject("users", userService.findAll());
         }
 
         try {
-             if (Optional.ofNullable(model.getAttribute("categoryName")).isEmpty()) {
+            if (Optional.ofNullable(categoryId).isEmpty()) {
                 forumCategoryService.create(category);
             } else {
-                forumCategoryService.update(category, (String) model.getAttribute("categoryName"));
+                System.out.println("UPDATE");
+                forumCategoryService.update(category, categoryId);
             }
         } catch (Exception e) {
             return modelAndView.addObject("errorMessage", e.getMessage())
