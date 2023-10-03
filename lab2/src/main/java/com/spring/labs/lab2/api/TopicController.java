@@ -22,11 +22,13 @@ public class TopicController {
     @Autowired
     private UserService userService;
 
-    @GetMapping({"/create", "/create/{topicId}"})
-    public ModelAndView createForm(@PathVariable(value = "topicId", required = false) Long topicId) {
-        ModelAndView modelAndView = new ModelAndView("topics/create/categoryName");
+    @GetMapping({"/create/{categoryName}", "/create/{topicId}/{categoryName}"})
+    public ModelAndView createForm(@PathVariable(value = "topicId", required = false) Long topicId,
+                                   @PathVariable("categoryName") String categoryName) {
+        ModelAndView modelAndView = new ModelAndView("topics/create");
         modelAndView.addObject("topic", new CreateTopicDto());
         modelAndView.addObject("authors", userService.findAll());
+        modelAndView.addObject("categoryName", categoryName);
         if (Optional.ofNullable(topicId).isPresent()) {
             Topic topic = topicService.findById(topicId);
             CreateTopicDto createTopicDto = CreateTopicDto.builder()
@@ -42,24 +44,26 @@ public class TopicController {
 
     @PostMapping({"/create"})
     public ModelAndView create(@Valid @ModelAttribute("topic") CreateTopicDto topic, BindingResult bindingResult,
-                               @RequestParam(value = "topicId", required = false) Long topicId) {
-        ModelAndView modelAndView = new ModelAndView("topics/create/categoryName");
+                               @RequestParam(value = "topicId", required = false) Long topicId,
+                               @RequestParam("categoryName") String categoryName) {
+        ModelAndView modelAndView = new ModelAndView("topics/create");
         if (bindingResult.hasFieldErrors()) {
             modelAndView.addObject("authors", userService.findAll());
             return modelAndView;
         }
         try {
             if (Optional.ofNullable(topicId).isEmpty()) {
-                topicService.create(topic);
+                topicService.create(topic, categoryName);
             } else {
                 topicService.updateTopic(topic, topicId);
             }
         } catch (Exception e) {
             modelAndView.addObject("errorMessage", e.getMessage())
-                    .addObject("authors", userService.findAll());
+                    .addObject("authors", userService.findAll())
+                    .addObject("categoryName", categoryName);
             return modelAndView;
         }
-        return new ModelAndView("redirect:/topics/all");
+        return new ModelAndView("redirect:/topics/" + categoryName);
     }
 
     @GetMapping({"/{categoryName}", "/all/{categoryName}"})
@@ -83,8 +87,9 @@ public class TopicController {
     }
 
     @PostMapping("/delete")
-    public ModelAndView deleteByName(@RequestParam String title) {
+    public ModelAndView deleteByName(@RequestParam String title,
+                                     @RequestParam("categoryName") String categoryName) {
         topicService.deleteTopic(title);
-        return new ModelAndView("redirect:/topics");
+        return new ModelAndView("redirect:/topics/" + categoryName);
     }
 }

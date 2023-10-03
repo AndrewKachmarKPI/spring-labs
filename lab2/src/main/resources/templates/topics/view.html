@@ -26,12 +26,12 @@
         <div class="d-flex justify-content-between align-items-center">
             <h3 class="mb-0">Topics <span class="badge text-bg-secondary"
                                           th:text="${topics.size()}"></span></h3>
-            <a class="btn btn-outline-success" th:href="/topics/create/{categoryName}">Create topic</a>
+            <a class="btn btn-outline-success" th:href="@{/topics/create/{categoryName}(categoryName = ${categoryName})}">Create topic</a>
         </div>
         <div th:if="${topics.isEmpty()}">
             <div class="flex-column text-center">
                 <h3 class="text-center">No topics found!</h3>
-                <a class="btn btn-lg btn-primary" th:href="/topics/create/{categoryName}">Create topic</a>
+                <a class="btn btn-lg btn-primary" th:href="@{/topics/create/{categoryName}(categoryName = ${categoryName})}">Create topic</a>
             </div>
         </div>
 
@@ -67,11 +67,11 @@
                 <div class="card-footer">
                     <div class="d-flex justify-content-between align-items-center">
                         <form method="post" th:action="@{/topics/delete}">
-                            <input type="text" class="d-none" th:name="title"
-                                   th:value="${topic.title}"/>
+                            <input type="text" class="d-none" th:name="title" th:value="${topic.title}"/>
+                            <input type="text" class="d-none" th:name="categoryName" th:value="${categoryName}"/>
                             <div class="btn-group">
                                 <a type="button" class="btn btn-sm btn-outline-success"
-                                   th:href="@{/topics/create/{id}(id = ${topic.id})}">Edit</a>
+                                   th:href="@{/topics/create/{id}/{categoryName}(id = ${topic.id}, categoryName = ${categoryName})}">Edit</a>
                                 <button type="submit" class="btn btn-sm btn-outline-danger">Remove</button>
                             </div>
                         </form>

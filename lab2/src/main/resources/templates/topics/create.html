@@ -18,6 +18,7 @@
             <form th:object="${topic}"
                   th:action="@{/topics/create}"
                   method="post">
+                <input type="text" class="d-none" th:if="${categoryName!=null}" th:name="categoryName" th:value="${categoryName}"/>
                 <input type="text" class="d-none" th:if="${topicId!=null}" th:name="topicId" th:value="${topicId}"/>
 
                 <div class="mb-3">

@@ -31,12 +31,13 @@ public class TopicServiceImpl implements TopicService {
 
 
     @Override
-    public Topic create(CreateTopicDto topicDto) {
+    public Topic create(CreateTopicDto topicDto, String categoryName) {
         Topic topic = Topic.builder()
                 .title(topicDto.getTitle())
                 .content(topicDto.getContent())
                 .author(userService.findUserByName(topicDto.getAuthor()))
                 .creationDate(LocalDateTime.now())
+                .forumCategory(categoryService.findByName(categoryName))
                 .build();
         topicDao.save(topic);
         return topic;

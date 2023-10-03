@@ -5,8 +5,9 @@ import com.spring.labs.lab2.dto.CreateTopicDto;
 import net.datafaker.Faker;
 
 import java.util.List;
+
 public interface TopicService {
-    Topic create(CreateTopicDto topicDto);
+    Topic create(CreateTopicDto topicDto, String categoryName);
 
     List<Topic> findAll(String categoryName);
 
