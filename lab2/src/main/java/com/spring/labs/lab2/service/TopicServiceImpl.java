@@ -1,6 +1,7 @@
 package com.spring.labs.lab2.service;
 
 import com.spring.labs.lab2.dao.FakeTopicDao;
+import com.spring.labs.lab2.domain.ForumCategory;
 import com.spring.labs.lab2.domain.Topic;
 import com.spring.labs.lab2.domain.User;
 import com.spring.labs.lab2.dto.CreateTopicDto;
@@ -16,16 +17,16 @@ import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 @Service
-@RequiredArgsConstructor
 public class TopicServiceImpl implements TopicService {
-    private FakeTopicDao topicDao;
-    @Autowired
-    private UserService userService;
-    private Faker faker;
+    private final FakeTopicDao topicDao;
+    private final UserService userService;
+    private final ForumCategoryService categoryService;
 
     @Autowired
-    public TopicServiceImpl(FakeTopicDao topicDao) {
+    public TopicServiceImpl(FakeTopicDao topicDao, UserService userService, ForumCategoryService categoryService) {
         this.topicDao = topicDao;
+        this.userService = userService;
+        this.categoryService = categoryService;
     }
 
 
@@ -43,8 +44,10 @@ public class TopicServiceImpl implements TopicService {
 
 
     @Override
-    public List<Topic> findAll() {
-        return topicDao.findAll();
+    public List<Topic> findAll(String categoryName) {
+        return topicDao.findAll().stream()
+                .filter(topic -> topic.getForumCategory().getCategoryName().equals(categoryName))
+                .toList();
     }
 
     @Override
@@ -72,11 +75,13 @@ public class TopicServiceImpl implements TopicService {
     public void generateDefaultTopics(Integer size, Faker faker) {
         List<String> topicTitles = Stream.generate(() -> faker.lorem().sentence(2)).distinct().limit(size + 1).toList();
         List<String> authorNames = userService.findAll().stream().map(User::getUsername).toList();
+        List<ForumCategory> categories = categoryService.findAll();
         IntStream.range(1, size + 1).mapToObj(index -> Topic.builder()
                 .creationDate(LocalDateTime.now().minusDays(new Random().nextInt(0, 3)))
                 .title(topicTitles.get(index))
                 .content(faker.lorem().sentence())
                 .author(userService.findUserByName(authorNames.get(new Random().nextInt(authorNames.size()))))
+                .forumCategory(categories.get(new Random().nextInt(0, categories.size())))
                 .build()).forEach(topicDao::save);
     }
 

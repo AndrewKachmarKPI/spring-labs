@@ -8,7 +8,7 @@ import java.util.List;
 public interface TopicService {
     Topic create(CreateTopicDto topicDto);
 
-    List<Topic> findAll();
+    List<Topic> findAll(String categoryName);
 
     Topic findById(Long id);
 

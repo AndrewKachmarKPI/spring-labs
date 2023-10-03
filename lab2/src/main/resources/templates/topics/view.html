@@ -19,6 +19,10 @@
 <div layout:fragment="content">
 
     <div class="row g-3">
+        <h3 class="mb-0 display-5 text-center" th:text="${categoryName}"></h3>
+    </div>
+    <hr>
+    <div class="row g-3">
         <div class="d-flex justify-content-between align-items-center">
             <h3 class="mb-0">Topics <span class="badge text-bg-secondary"
                                           th:text="${topics.size()}"></span></h3>

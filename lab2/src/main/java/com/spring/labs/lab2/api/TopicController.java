@@ -62,10 +62,11 @@ public class TopicController {
         return new ModelAndView("redirect:/topics/all");
     }
 
-    @GetMapping({"", "/all"})
-    public ModelAndView findAll() {
+    @GetMapping({"/{categoryName}", "/all/{categoryName}"})
+    public ModelAndView findAll(@PathVariable("categoryName") String categoryName) {
         ModelAndView modelAndView = new ModelAndView("topics/view");
-        modelAndView.addObject("topics", topicService.findAll());
+        modelAndView.addObject("topics", topicService.findAll(categoryName));
+        modelAndView.addObject("categoryName", categoryName);
         return modelAndView;
     }
 
