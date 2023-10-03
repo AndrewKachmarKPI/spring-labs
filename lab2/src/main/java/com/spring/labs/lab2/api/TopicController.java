@@ -49,6 +49,7 @@ public class TopicController {
         ModelAndView modelAndView = new ModelAndView("topics/create");
         if (bindingResult.hasFieldErrors()) {
             modelAndView.addObject("authors", userService.findAll());
+            modelAndView.addObject("categoryName", categoryName);
             return modelAndView;
         }
         try {
