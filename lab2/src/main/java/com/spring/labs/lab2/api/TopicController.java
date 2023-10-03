@@ -46,18 +46,17 @@ public class TopicController {
 
     @PostMapping({"/create"})
     public ModelAndView create(@Valid @ModelAttribute("topic") CreateTopicDto topic, BindingResult bindingResult,
-                               @RequestParam(value = "id", required = false) Long id) {
+                               @RequestParam(value = "topicId", required = false) Long topicId) {
         ModelAndView modelAndView = new ModelAndView("topics/create");
         if (bindingResult.hasFieldErrors()) {
             modelAndView.addObject("authors", userService.findAll());
             return modelAndView;
         }
         try {
-            if (Optional.ofNullable(id).isEmpty()) {
+            if (Optional.ofNullable(topicId).isEmpty()) {
                 topicService.create(topic);
             } else {
-                System.out.println("UPDATE");
-                topicService.updateTopic(topic, id);
+                topicService.updateTopic(topic, topicId);
             }
         } catch (Exception e) {
             modelAndView.addObject("errorMessage", e.getMessage())

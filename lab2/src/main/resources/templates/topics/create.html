@@ -18,7 +18,8 @@
             <form th:object="${topic}"
                   th:action="@{/topics/create}"
                   method="post">
-                <input type="text" class="d-none" th:if="${id!=null}" th:name="id" th:value="${id}"/>
+                <input type="text" class="d-none" th:if="${topicId!=null}" th:name="topicId" th:value="${topicId}"/>
+
                 <div class="mb-3">
                     <label for="title" class="form-label">Title</label>
                     <input id="title" type="text" class="form-control"
