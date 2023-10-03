@@ -1,16 +1,12 @@
 package com.spring.labs.lab2.dao;
 
-import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Repository;
 
-import com.spring.labs.lab2.domain.ForumCategory;
 import com.spring.labs.lab2.domain.Post;
 
 import lombok.RequiredArgsConstructor;
@@ -22,13 +18,15 @@ public class FakePostDao implements PostDao {
 	private final Map<String, Post> posts = new HashMap<>();
 
 	@Override
-	public void save(Post post) {
-		if (post != null && !posts.containsKey(post.getName())) {
-			posts.put(post.getName(), post);
+	public Post save(Post post) {
+		if (Optional.ofNullable(post.getId()).isEmpty()) {
+			post = post.toBuilder().id((long) posts.size() + 1).build();
 		} else {
-//          throw new postIsPresentException();
+			post = findById(post.getId());
+			posts.remove(post.getName());
 		}
- 	}
+		return posts.put(post.getName(), post);
+	}
 
 	@Override
 	public List<Post> findAll() {
@@ -42,11 +40,24 @@ public class FakePostDao implements PostDao {
 	}
 
 	@Override
-	public void deleteByName(String postName) {
-		if (posts.containsKey(postName)) {
-			posts.remove(postName);
-		} else {
-			throw new RuntimeException("Category with " + postName + " name  is not found");
+	public Post findByName(String postName) {
+		if (!existByName(postName)) {
+			throw new RuntimeException("Post is not found");
 		}
+		return posts.get(postName);
 	}
+
+	@Override
+	public void deleteByName(String postName) {
+		if (!existByName(postName)) {
+			throw new RuntimeException("Post with " + postName + " name  is not found");
+		}
+		posts.remove(postName);
+	}
+
+	@Override
+	public boolean existByName(String postName) {
+		return posts.containsKey(postName);
+	}
+
 }

@@ -6,11 +6,16 @@ import com.spring.labs.lab2.domain.Post;
 
 public interface PostDao {
 
-	void save(Post post);
+	Post save(Post post);
 
 	List<Post> findAll();
 
-	Post findById(Long id);
+	Post findById(Long id); 
 
+	Post findByName(String postName);
+
+    boolean existByName(String categoryName);
+	
 	void deleteByName(String postName);
-}
+	
+ }

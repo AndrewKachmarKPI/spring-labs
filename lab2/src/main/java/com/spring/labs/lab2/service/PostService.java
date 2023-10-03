@@ -2,17 +2,27 @@ package com.spring.labs.lab2.service;
 
 import java.util.List;
 import com.spring.labs.lab2.domain.Post;
-import com.spring.labs.lab2.domain.User;
+import com.spring.labs.lab2.dto.CreatePostDto;
+
+import net.datafaker.Faker;
 
 public interface PostService {
 
-	public List<Post> getAllPosts();
+	public List<Post> findAll();
 
-	public Post getPostById(Long id);
+	public Post getById(Long id);
 
-	public void createPost(Post post);
+	public Post createPost(CreatePostDto post);
 
-	public void deletePost(Long id);
+	public Post update(CreatePostDto post, Long id);
 
-	public void updatePost(Long id, String content,User author, String name, int upvotes, int downvotes);
+	public Post findByName(String postName);
+
+	void deleteByName(String postName);
+
+	Post findById(Long id);
+
+	Post changeAuthor(String postName, String username);
+
+	void generateDefaultPosts(Integer size, Faker faker);
 }
