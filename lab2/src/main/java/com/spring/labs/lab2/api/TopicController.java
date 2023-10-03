@@ -24,7 +24,7 @@ public class TopicController {
 
     @GetMapping({"/create", "/create/{topicId}"})
     public ModelAndView createForm(@PathVariable(value = "topicId", required = false) Long topicId) {
-        ModelAndView modelAndView = new ModelAndView("topics/create");
+        ModelAndView modelAndView = new ModelAndView("topics/create/categoryName");
         modelAndView.addObject("topic", new CreateTopicDto());
         modelAndView.addObject("authors", userService.findAll());
         if (Optional.ofNullable(topicId).isPresent()) {
@@ -43,7 +43,7 @@ public class TopicController {
     @PostMapping({"/create"})
     public ModelAndView create(@Valid @ModelAttribute("topic") CreateTopicDto topic, BindingResult bindingResult,
                                @RequestParam(value = "topicId", required = false) Long topicId) {
-        ModelAndView modelAndView = new ModelAndView("topics/create");
+        ModelAndView modelAndView = new ModelAndView("topics/create/categoryName");
         if (bindingResult.hasFieldErrors()) {
             modelAndView.addObject("authors", userService.findAll());
             return modelAndView;
