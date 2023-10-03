@@ -1,6 +1,7 @@
 package com.spring.labs.lab2.api;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -12,22 +13,25 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.ModelAndView;
 
+import com.spring.labs.lab2.domain.ForumCategory;
 import com.spring.labs.lab2.domain.Post;
+import com.spring.labs.lab2.dto.CreateForumCategoryDto;
 import com.spring.labs.lab2.service.PostService;
 
 @RestController
 @RequestMapping("/posts")
 public class PostController {
-
-	private final PostService postService;
-
-	@Autowired
+	
+	   @Autowired
+	private final PostService postService; 
+	   
 	public PostController(PostService postService) {
 		this.postService = postService;
 	}
 
-	@GetMapping("/")
+	   @GetMapping({"/create", "/create/{postId}"})
 	public List<Post> getAllPosts() {
 		return postService.getAllPosts();
 	}
@@ -37,10 +41,24 @@ public class PostController {
 		return postService.getPostById(id);
 	}
 
-	@PostMapping("/")
-	public void createPost(@RequestBody Post post) {
-		postService.createPost(post);
-	}
+    @GetMapping({"/create", "/create/{postId}"})
+    public ModelAndView createPost(@PathVariable(value = "id", required = false) Long id) {
+        ModelAndView modelAndView = new ModelAndView("posts/create");
+        modelAndView.addObject("post", new CreatePostDto());
+        modelAndView.addObject("users", userService.findAll());
+        if (Optional.ofNullable(postId).isPresent()) {
+            ForumCategory forumCategory = forumCategoryService.findById(postId);
+            CreateForumCategoryDto createForumCategoryDto = CreateForumCategoryDto.builder()
+                    .categoryName(forumCategory.getCategoryName())
+                    .description(forumCategory.getDescription())
+                    .username(forumCategory.getModerator().getUsername())
+                    .build();
+            modelAndView.addObject("post", createPostDto);
+            modelAndView.addObject("postId", postId);
+        }
+        return modelAndView;
+    }
+
 
 	@PutMapping("/{id}")
 	public void updatePost(@PathVariable Long id, @RequestParam(required = false) String content,

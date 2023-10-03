@@ -7,42 +7,47 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.spring.labs.lab2.dao.PostDao;
 import com.spring.labs.lab2.dao.PostRepository;
 import com.spring.labs.lab2.domain.Post;
+import com.spring.labs.lab2.domain.User;
 
 @Service
-public class PostService {
+public class PostServiceImpl implements PostService {
 
-	private final PostRepository postRepository;
+	private final PostDao dao;
 
 	@Autowired
-	public PostService(PostRepository postRepository) {
-		this.postRepository = postRepository;
+	public PostServiceImpl(PostDao dao) {
+		this.dao = dao;
 	}
 
 	public List<Post> getAllPosts() {
-		return postRepository.findAll();
+		return dao.findAll();
 	}
 
 	public Post getPostById(Long id) {
-		return postRepository.findById(id)
+		return dao.findById(id)
 				.orElseThrow(() -> new NoSuchElementException("Post with ID: " + id + " not found"));
 	}
 
 	public void createPost(Post post) {
-		postRepository.save(post);
+		dao.save(post);
 	}
 
 	public void deletePost(Long id) {
-		postRepository.deleteById(id);
+		dao.deleteById(id);
 	}
 
 	@Transactional
-	public void updatePost(Long id, String content, String name, int upvotes, int downvotes) {
-		Post post = postRepository.findById(id)
+	public void updatePost(Long id, String content, User author, String name, int upvotes, int downvotes) {
+		Post post = dao.findById(id)
 				.orElseThrow(() -> new IllegalStateException("Post with " + id + " does not exist"));
 		if (content != null && content.length() > 0) {
 			post.setContent(content);
+		}
+		if (author !=null) {
+			post.setAuthor(author);
 		}
 		if (name != null && name.length() > 0) {
 			post.setName(name);
@@ -53,6 +58,5 @@ public class PostService {
 		if (downvotes >= 0) {
 			post.setDownvotes(downvotes);
 		}
-
 	}
 }

@@ -1,20 +1,15 @@
 package com.spring.labs.lab2;
 
-import com.spring.labs.lab2.dao.ForumCategoryDao;
-import com.spring.labs.lab2.dao.UserDao;
+ 
 import com.spring.labs.lab2.service.ForumCategoryService;
-import com.spring.labs.lab2.service.UserService;
-import com.spring.labs.lab2.service.UserServiceImpl;
+import com.spring.labs.lab2.service.UserService; 
 import net.datafaker.Faker;
 import nz.net.ultraq.thymeleaf.LayoutDialect;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Scope;
-
-import java.util.Locale;
-import java.util.Random;
+import org.springframework.context.annotation.Scope; 
 
 @SpringBootApplication
 public class Lab2Application {

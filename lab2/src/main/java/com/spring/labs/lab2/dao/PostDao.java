@@ -1,8 +1,16 @@
 package com.spring.labs.lab2.dao;
 
-import org.springframework.data.jpa.repository.JpaRepository;
+import java.util.List;
 
 import com.spring.labs.lab2.domain.Post;
 
-public interface PostRepository extends JpaRepository<Post, Long> {
+public interface PostDao {
+
+	void save(Post post);
+
+	List<Post> findAll();
+
+	Post findById(Long id);
+
+	void deleteByName(String postName);
 }
