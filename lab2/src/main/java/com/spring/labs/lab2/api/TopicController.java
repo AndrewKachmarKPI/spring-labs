@@ -1,10 +1,7 @@
 package com.spring.labs.lab2.api;
 
-import com.spring.labs.lab2.domain.ForumCategory;
 import com.spring.labs.lab2.domain.Topic;
-import com.spring.labs.lab2.dto.CreateForumCategoryDto;
 import com.spring.labs.lab2.dto.CreateTopicDto;
-import com.spring.labs.lab2.service.ForumCategoryService;
 import com.spring.labs.lab2.service.TopicService;
 import com.spring.labs.lab2.service.UserService;
 import jakarta.validation.Valid;
@@ -36,7 +33,6 @@ public class TopicController {
                     .title(topic.getTitle())
                     .content(topic.getContent())
                     .author(topic.getAuthor().getUsername())
-//                    .forumCategory(topic.getForumCategory())
                     .build();
             modelAndView.addObject("topic", createTopicDto);
             modelAndView.addObject("topicId", topicId);

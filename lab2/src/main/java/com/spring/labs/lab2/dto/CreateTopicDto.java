@@ -1,7 +1,5 @@
 package com.spring.labs.lab2.dto;
 
-import com.spring.labs.lab2.domain.ForumCategory;
-import com.spring.labs.lab2.domain.User;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
