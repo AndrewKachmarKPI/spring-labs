@@ -1,7 +1,10 @@
 package com.spring.labs.lab2.api;
 
+import com.spring.labs.lab2.domain.ForumCategory;
 import com.spring.labs.lab2.domain.Topic;
+import com.spring.labs.lab2.dto.CreateForumCategoryDto;
 import com.spring.labs.lab2.dto.CreateTopicDto;
+import com.spring.labs.lab2.service.ForumCategoryService;
 import com.spring.labs.lab2.service.TopicService;
 import com.spring.labs.lab2.service.UserService;
 import jakarta.validation.Valid;
@@ -33,7 +36,7 @@ public class TopicController {
                     .title(topic.getTitle())
                     .content(topic.getContent())
                     .author(topic.getAuthor().getUsername())
-                    .forumCategory(topic.getForumCategory())
+//                    .forumCategory(topic.getForumCategory())
                     .build();
             modelAndView.addObject("topic", createTopicDto);
             modelAndView.addObject("topicId", topicId);
@@ -46,9 +49,9 @@ public class TopicController {
                                @RequestParam(value = "id", required = false) Long id) {
         ModelAndView modelAndView = new ModelAndView("topics/create");
         if (bindingResult.hasFieldErrors()) {
-            return modelAndView.addObject("authors", userService.findAll());
+            modelAndView.addObject("authors", userService.findAll());
+            return modelAndView;
         }
-
         try {
             if (Optional.ofNullable(id).isEmpty()) {
                 topicService.create(topic);
@@ -57,8 +60,9 @@ public class TopicController {
                 topicService.updateTopic(topic, id);
             }
         } catch (Exception e) {
-            return modelAndView.addObject("errorMessage", e.getMessage())
+            modelAndView.addObject("errorMessage", e.getMessage())
                     .addObject("authors", userService.findAll());
+            return modelAndView;
         }
         return new ModelAndView("redirect:/topics/all");
     }
@@ -74,10 +78,17 @@ public class TopicController {
     public ModelAndView findByNameForm() {
         return new ModelAndView("findTopic");
     }
+
     @PostMapping("/find")
     public ModelAndView findByName(@RequestParam("title") String title) {
         ModelAndView modelAndView = new ModelAndView("topic");
         modelAndView.addObject("topic", topicService.findByName(title));
         return modelAndView;
+    }
+
+    @PostMapping("/delete")
+    public ModelAndView deleteByName(@RequestParam String title) {
+        topicService.deleteTopic(title);
+        return new ModelAndView("redirect:/topics");
     }
 }

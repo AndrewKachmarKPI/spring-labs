@@ -16,7 +16,7 @@ public interface TopicDao {
 
 //    void updateTopic(CreateTopicDto topicDto, Long id);
 
-    void deleteTopic(Topic topic);
+    void deleteTopic(String title);
 
     Object findByName(String title);
 

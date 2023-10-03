@@ -42,26 +42,13 @@
                     <label for="author" class="form-label">Author</label>
                     <select class="form-select" id="author" th:field="*{author}">
                         <option th:each="author :${authors}"
-                                th:value="${author.author}"
-                                th:text="${author.author}"></option>
+                                th:value="${author.username}"
+                                th:text="${author.username}"></option>
                     </select>
                     <small th:if="${#fields.hasErrors('author')}"
                            th:errors="*{author}"
                            th:text="${#strings.listJoin(#fields.errors('author'), ', ')}" class="text-danger">
                         Please select an author.
-                    </small>
-                </div>
-                <div class="mb-3">
-                    <label for="forumCategory" class="form-label">Category</label>
-                    <select class="form-select" id="forumCategory" th:field="*{forumCategory}">
-                        <option th:each="forumCategory :${forumCategories}"
-                                th:value="${forumCategory.forumcategory}"
-                                th:text="${forumCategory.forumcategory}"></option>
-                    </select>
-                    <small th:if="${#fields.hasErrors('forumCategory')}"
-                           th:errors="*{forumcategory}"
-                           th:text="${#strings.listJoin(#fields.errors('forumCategory'), ', ')}" class="text-danger">
-                        Please select a forum category.
                     </small>
                 </div>
                 <button type="submit" class="btn btn-success">Submit</button>

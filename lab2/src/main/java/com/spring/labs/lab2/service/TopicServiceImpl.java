@@ -1,6 +1,7 @@
 package com.spring.labs.lab2.service;
 
 import com.spring.labs.lab2.dao.FakeTopicDao;
+import com.spring.labs.lab2.domain.ForumCategory;
 import com.spring.labs.lab2.domain.Topic;
 import com.spring.labs.lab2.domain.User;
 import com.spring.labs.lab2.dto.CreateTopicDto;
@@ -18,8 +19,8 @@ import java.util.stream.Stream;
 @Service
 @RequiredArgsConstructor
 public class TopicServiceImpl implements TopicService {
-
     private FakeTopicDao topicDao;
+    @Autowired
     private UserService userService;
     private Faker faker;
 
@@ -35,7 +36,6 @@ public class TopicServiceImpl implements TopicService {
                 .title(topicDto.getTitle())
                 .content(topicDto.getContent())
                 .author(userService.findUserByName(topicDto.getAuthor()))
-                .forumCategory(topicDto.getForumCategory())
                 .creationDate(LocalDateTime.now())
                 .build();
         topicDao.save(topic);
@@ -56,17 +56,17 @@ public class TopicServiceImpl implements TopicService {
     @Override
     public void updateTopic(CreateTopicDto topicDto, Long id) {
         Topic topic = findById(id);
-        topic = topic.toBuilder().title(topicDto.getTitle())
+        topic = topic.toBuilder()
+                .title(topicDto.getTitle())
                 .content(topicDto.getContent())
                 .author(userService.findUserByName(topicDto.getAuthor()))
-                .forumCategory(topicDto.getForumCategory())
                 .build();
         topicDao.save(topic);
     }
 
     @Override
-    public void deleteTopic(Topic topic) {
-        topicDao.deleteTopic(topic);
+    public void deleteTopic(String title) {
+        topicDao.deleteTopic(title);
     }
 
     @Override

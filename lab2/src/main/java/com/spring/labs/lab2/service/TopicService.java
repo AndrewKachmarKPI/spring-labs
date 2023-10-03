@@ -14,7 +14,7 @@ public interface TopicService {
 
     void updateTopic(CreateTopicDto topicDto, Long id);
 
-    void deleteTopic(Topic topic);
+    void deleteTopic(String title);
 
     void generateDefaultTopics(Integer size, Faker faker);
 
