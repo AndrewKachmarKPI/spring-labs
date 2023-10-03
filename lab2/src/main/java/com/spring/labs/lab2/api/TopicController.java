@@ -26,13 +26,13 @@ public class TopicController {
     public ModelAndView createForm(@PathVariable(value = "topicId", required = false) Long topicId) {
         ModelAndView modelAndView = new ModelAndView("topics/create");
         modelAndView.addObject("topic", new CreateTopicDto());
-        modelAndView.addObject("author", userService.findAll());
+        modelAndView.addObject("authors", userService.findAll());
         if (Optional.ofNullable(topicId).isPresent()) {
             Topic topic = topicService.findById(topicId);
             CreateTopicDto createTopicDto = CreateTopicDto.builder()
                     .title(topic.getTitle())
                     .content(topic.getContent())
-                    .author(topic.getAuthor())
+                    .author(topic.getAuthor().getUsername())
                     .forumCategory(topic.getForumCategory())
                     .build();
             modelAndView.addObject("topic", createTopicDto);
@@ -43,23 +43,41 @@ public class TopicController {
 
     @PostMapping({"/create"})
     public ModelAndView create(@Valid @ModelAttribute("topic") CreateTopicDto topic, BindingResult bindingResult,
-                               @RequestParam(value = "topic", required = false) Long topicId) {
+                               @RequestParam(value = "id", required = false) Long id) {
         ModelAndView modelAndView = new ModelAndView("topics/create");
         if (bindingResult.hasFieldErrors()) {
-            return modelAndView.addObject("author", userService.findAll());
+            return modelAndView.addObject("authors", userService.findAll());
         }
 
         try {
-            if (Optional.ofNullable(topicId).isEmpty()) {
+            if (Optional.ofNullable(id).isEmpty()) {
                 topicService.create(topic);
             } else {
                 System.out.println("UPDATE");
-                topicService.updateTopic(topic, topicId);
+                topicService.updateTopic(topic, id);
             }
         } catch (Exception e) {
             return modelAndView.addObject("errorMessage", e.getMessage())
-                    .addObject("author", userService.findAll());
+                    .addObject("authors", userService.findAll());
         }
-        return new ModelAndView("redirect:/topic/all");
+        return new ModelAndView("redirect:/topics/all");
+    }
+
+    @GetMapping({"", "/all"})
+    public ModelAndView findAll() {
+        ModelAndView modelAndView = new ModelAndView("topics/view");
+        modelAndView.addObject("topics", topicService.findAll());
+        return modelAndView;
+    }
+
+    @GetMapping("/find")
+    public ModelAndView findByNameForm() {
+        return new ModelAndView("findTopic");
+    }
+    @PostMapping("/find")
+    public ModelAndView findByName(@RequestParam("title") String title) {
+        ModelAndView modelAndView = new ModelAndView("topic");
+        modelAndView.addObject("topic", topicService.findByName(title));
+        return modelAndView;
     }
 }

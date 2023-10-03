@@ -65,7 +65,8 @@
                             <input type="text" class="d-none" th:name="categoryName"
                                    th:value="${category.categoryName}"/>
                             <div class="btn-group">
-                                <button type="button" class="btn btn-sm btn-outline-secondary">View topics</button>
+                                <a type="button" class="btn btn-sm btn-outline-success"
+                                   th:href="@{/topics}">View topics</a>
                                 <a type="button" class="btn btn-sm btn-outline-success"
                                    th:href="@{/categories/create/{categoryId}(categoryId = ${category.id})}">Edit</a>
                                 <button type="submit" class="btn btn-sm btn-outline-danger">Remove</button>

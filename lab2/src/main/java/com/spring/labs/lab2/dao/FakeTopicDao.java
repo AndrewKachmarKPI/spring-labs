@@ -1,55 +1,53 @@
 package com.spring.labs.lab2.dao;
 
 import com.spring.labs.lab2.domain.Topic;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
-import java.util.Objects;
 
 @Repository
+@RequiredArgsConstructor
 public class FakeTopicDao implements TopicDao {
-    private List<Topic> topics;
+    private final List<Topic> topics = new ArrayList<>();
 
     @Override
     public void save(Topic topic) {
         topics.add(topic);
+        for (Topic topic1 : topics) {
+            topic1.setId((long) topics.indexOf(topic1));
+        }
     }
 
     @Override
     public List<Topic> findAll() {
-        return new ArrayList<>(topics);
+        return topics.stream().sorted(Comparator.comparing(Topic::getCreationDate).reversed()).toList();
+//        return topics;
     }
 
     @Override
     public Topic findById(Long id) {
-        Topic foundTopic = find(id);
-        if (foundTopic == null) {
-            return null;
-        }
-        return new Topic(foundTopic.getId(), foundTopic.getTitle(), foundTopic.getContent(), foundTopic.getAuthor(),
-                foundTopic.getCreationDate(), foundTopic.getLastUpdatedDate(), foundTopic.getViews(),
-                foundTopic.getTags(), foundTopic.getUpVotes(), foundTopic.getDownVotes(),
-                foundTopic.isLocked(), foundTopic.getForumCategory());
-    }
-
-    private Topic find(Long id) {
-        for (Topic topic : topics) {
-            if (Objects.equals(id, topic.getId())) {
-                return topic;
-            }
-        }
-        return null;
+        return topics.stream()
+                .filter(topic -> topic.getId().equals(id)).findAny()
+                .orElseThrow(() -> new RuntimeException("Topic with id:" + id + " is not found"));
     }
 
     @Override
-    public void deleteTopic(Long id) {
-        Topic topic = find(id);
-        if (topic != null) {
-            topics.remove(topic);
-            System.out.println("Topic: " + id + " deleted");
-        } else {
-            System.out.println("Topic: " + id + " not found");
+    public void deleteTopic(Topic topic) {
+        if (!topics.contains(topic)) {
+            throw new RuntimeException("Topic is not found");
         }
+        topics.remove(topic);
+    }
+    @Override
+    public Object findByName(String title) {
+        for (Topic topic : topics) {
+            if (topic.getTitle().equals(title)) {
+                return topic;
+            }
+        }
+        return "Topic is not found";
     }
 }
