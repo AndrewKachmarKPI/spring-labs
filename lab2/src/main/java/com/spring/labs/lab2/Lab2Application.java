@@ -2,6 +2,7 @@ package com.spring.labs.lab2;
 
  
 import com.spring.labs.lab2.service.ForumCategoryService;
+import com.spring.labs.lab2.service.PostService;
 import com.spring.labs.lab2.service.UserService; 
 import net.datafaker.Faker;
 import nz.net.ultraq.thymeleaf.LayoutDialect;
@@ -19,10 +20,11 @@ public class Lab2Application {
     }
 
     @Bean
-    CommandLineRunner runner(UserService userDao, ForumCategoryService forumCategoryDao) {
+    CommandLineRunner runner(UserService userDao, ForumCategoryService forumCategoryDao,PostService postServiceDao) {
         return args -> {
             userDao.generateDefaultUsers(100, dataFaker());
             forumCategoryDao.generateDefaultCategories(15, dataFaker());
+            postServiceDao.generateDefaultPosts(15, dataFaker());
         };
     }
 
