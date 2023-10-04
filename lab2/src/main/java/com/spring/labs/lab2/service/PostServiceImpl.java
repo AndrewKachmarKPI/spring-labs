@@ -1,21 +1,16 @@
 package com.spring.labs.lab2.service;
 
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.NoSuchElementException;
+import java.util.List; 
 import java.util.Random;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
-
-import org.springframework.beans.factory.annotation.Autowired;
+ 
 import org.springframework.stereotype.Service;
-
-import com.spring.labs.lab2.dao.ForumCategoryDao;
-import com.spring.labs.lab2.dao.PostDao;
-import com.spring.labs.lab2.domain.ForumCategory;
+ 
+import com.spring.labs.lab2.dao.PostDao; 
 import com.spring.labs.lab2.domain.Post;
-import com.spring.labs.lab2.domain.User;
-import com.spring.labs.lab2.dto.CreateForumCategoryDto;
+import com.spring.labs.lab2.domain.User; 
 import com.spring.labs.lab2.dto.CreatePostDto;
 
 import lombok.RequiredArgsConstructor;
@@ -51,10 +46,8 @@ public class PostServiceImpl implements PostService {
 		if (dao.existByName(createPost.getName())) {
 			throw new RuntimeException("Category with name " + createPost.getName() + " already exists");
 		}
-		Post post = Post.builder()
-				.content(Post.builder().content(createPost.getContent()).name(createPost.getName())
-						.author(userService.findUserByName(createPost.getAuthor().getUsername()))
-						.created(LocalDateTime.now()).build());
+		Post post = Post.builder().content(createPost.getContent()).name(createPost.getName())
+				.author(userService.findUserByName(createPost.getUsername())).creationDate(LocalDateTime.now()).build();
 
 		return dao.save(post);
 	}
@@ -63,7 +56,7 @@ public class PostServiceImpl implements PostService {
 	public Post update(CreatePostDto createPost, Long postId) {
 		Post post = findById(postId);
 		post = post.toBuilder().content(createPost.getContent()).name(createPost.getName())
-				.author(userService.findUserByName(createPost.getAuthor())).build();
+				.author(userService.findUserByName(createPost.getUsername())).build();
 		return dao.save(post);
 	}
 
@@ -91,15 +84,14 @@ public class PostServiceImpl implements PostService {
 	}
 
 	@Override
-    public void generateDefaultPosts(Integer size, Faker faker) {
-        List<String> postNames = Stream.generate(() -> faker.lorem().sentence(2)).distinct().limit(size + 1).toList();
-        List<String> usernames = userService.findAll().stream().map(User::getUsername).toList();
-        IntStream.range(1, size + 1).mapToObj(index -> Post.builder()
-                .creationDate(LocalDateTime.now().minusDays(new Random().nextInt(0, 3)))
-                .name(postNames.get(index))
-                .content(faker.lorem().sentence())
-                .author(userService.findUserByName(usernames.get(new Random().nextInt(usernames.size()))))
-                .build()).forEach(dao::save);
-    }
+	public void generateDefaultPosts(Integer size, Faker faker) {
+		List<String> postNames = Stream.generate(() -> faker.lorem().sentence(2)).distinct().limit(size + 1).toList();
+		List<String> usernames = userService.findAll().stream().map(User::getUsername).toList();
+		IntStream.range(1, size + 1).mapToObj(index -> Post.builder()
+				.creationDate(LocalDateTime.now().minusDays(new Random().nextInt(0, 3))).name(postNames.get(index))
+				.content(faker.lorem().sentence())
+				.author(userService.findUserByName(usernames.get(new Random().nextInt(usernames.size())))).build())
+				.forEach(dao::save);
+	}
 
 }

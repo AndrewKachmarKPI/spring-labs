@@ -6,8 +6,7 @@ import com.spring.labs.lab2.enums.UserRole;
 import net.datafaker.Faker;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.stream.Collectors;
+import java.util.List; 
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 

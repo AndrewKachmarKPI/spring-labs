@@ -35,7 +35,7 @@ public class PostController {
 		modelAndView.addObject("users", userService.findAll());
 		if (Optional.ofNullable(postId).isPresent()) {
 			Post post = postService.getById(postId);
-			CreatePostDto createPostDto = CreatePostDto.builder().author(post.getAuthor().getUsername())
+			CreatePostDto createPostDto = CreatePostDto.builder().username(post.getAuthor().getUsername())
 					.content(post.getContent()).upvotes(post.getUpvotes()).downvotes(post.getDownvotes()).build();
 			modelAndView.addObject("post", createPostDto);
 			modelAndView.addObject("postId", postId);

@@ -7,14 +7,10 @@ import com.spring.labs.lab2.dto.CreateForumCategoryDto;
 import lombok.RequiredArgsConstructor;
 import net.datafaker.Faker;
 import org.springframework.stereotype.Service;
-
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
-import java.util.List;
-import java.util.Optional;
-import java.util.Random;
-import java.util.stream.Collectors;
+ 
+import java.time.LocalDateTime; 
+import java.util.List; 
+import java.util.Random; 
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 

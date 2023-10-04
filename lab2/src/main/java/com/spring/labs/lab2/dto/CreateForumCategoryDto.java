@@ -23,5 +23,5 @@ public class CreateForumCategoryDto {
     @NotNull
     @NotBlank
     @Pattern(regexp = "^[a-zA-Z0-9.]+$")
-    private String author;
+    private String username;
 }

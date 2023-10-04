@@ -20,30 +20,30 @@ import lombok.Setter;
 @Builder(toBuilder = true)
 public class CreatePostDto {
 
-    @NotNull
-    @NotBlank
-    @Pattern(regexp = "^[a-zA-Z0-9.]+$")
-	private final String author;
-//	private final Topic topic
+	@NotNull
+	@NotBlank
+	@Pattern(regexp = "^[a-zA-Z0-9.]+$")
+	private String username;
+//	private   Topic topic
 
-    @NotNull
-    @NotBlank
-    @Pattern(regexp = "^[a-zA-Z0-9.]+$")
-	private final String name;
+	@NotNull
+	@NotBlank
+	@Pattern(regexp = "^[a-zA-Z0-9.]+$")
+	private String name;
 
-    @NotNull
-    @NotBlank 
-	private final String content;
+	@NotNull
+	@NotBlank
+	private String content;
 
-    @NotNull
-    @NotBlank 
-	private final LocalDate creationDate;
+	@NotNull
+	@NotBlank
+	private LocalDate creationDate;
 
-    @NotNull
-    @NotBlank 
-	private final int upvotes;
+	@NotNull
+	@NotBlank
+	private int upvotes;
 
-    @NotNull
-    @NotBlank 
-	private final int downvotes;
+	@NotNull
+	@NotBlank
+	private int downvotes;
 }
