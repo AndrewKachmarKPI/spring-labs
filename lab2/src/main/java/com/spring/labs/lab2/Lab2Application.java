@@ -5,8 +5,6 @@ import com.spring.labs.lab2.service.ForumCategoryService;
 import com.spring.labs.lab2.service.PostService;
 import com.spring.labs.lab2.service.UserService;
 import com.spring.labs.lab2.service.TopicService;
-import com.spring.labs.lab2.service.UserService;
-import com.spring.labs.lab2.service.UserServiceImpl;
 import net.datafaker.Faker;
 import nz.net.ultraq.thymeleaf.LayoutDialect;
 import org.springframework.boot.CommandLineRunner;
