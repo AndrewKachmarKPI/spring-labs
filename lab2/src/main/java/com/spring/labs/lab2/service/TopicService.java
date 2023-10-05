@@ -7,17 +7,19 @@ import net.datafaker.Faker;
 import java.util.List;
 
 public interface TopicService {
-    Topic create(CreateTopicDto topicDto, String categoryName);
+	Topic create(CreateTopicDto topicDto, String categoryName);
 
-    List<Topic> findAll(String categoryName);
+	List<Topic> findAll();
 
-    Topic findById(Long id);
+	List<Topic> findAll(String categoryName);
 
-    void updateTopic(CreateTopicDto topicDto, Long id);
+	Topic findById(Long id);
 
-    void deleteTopic(String title);
+	void updateTopic(CreateTopicDto topicDto, Long id);
 
-    void generateDefaultTopics(Integer size, Faker faker);
+	void deleteTopic(String title);
 
-    Object findByName(String title);
+	void generateDefaultTopics(Integer size, Faker faker);
+
+	Object findByName(String title);
 }

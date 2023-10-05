@@ -52,6 +52,11 @@ public class TopicServiceImpl implements TopicService {
     }
 
     @Override
+    public List<Topic> findAll( ) {
+        return topicDao.findAll();
+    }
+    
+    @Override
     public Topic findById(Long id) {
         return topicDao.findById(id);
     }
