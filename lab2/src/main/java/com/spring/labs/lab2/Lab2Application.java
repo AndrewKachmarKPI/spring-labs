@@ -25,7 +25,7 @@ public class Lab2Application {
         return args -> {
             userDao.generateDefaultUsers(100, dataFaker());
             forumCategoryDao.generateDefaultCategories(15, dataFaker());
-            topicDao.generateDefaultTopics(15, dataFaker());     
+            topicDao.generateDefaultTopics(30, dataFaker());     
             postServiceDao.generateDefaultPosts(75, dataFaker());
         };
     }
