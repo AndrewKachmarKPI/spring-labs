@@ -89,7 +89,8 @@ public class PostServiceImpl implements PostService {
 		List<String> usernames = userService.findAll().stream().map(User::getUsername).toList();
 		IntStream.range(1, size + 1).mapToObj(index -> Post.builder()
 				.creationDate(LocalDateTime.now().minusDays(new Random().nextInt(0, 3))).name(postNames.get(index))
-				.content(faker.lorem().sentence())
+				.content(faker.lorem().sentence(50))
+				.description(faker.lorem().sentence(2))
 				.author(userService.findUserByName(usernames.get(new Random().nextInt(usernames.size())))).build())
 				.forEach(dao::save);
 	}

@@ -18,6 +18,7 @@ public class Post {
 //	private final Topic topic
 	private final String name;
 	private final String content;
+	private final String description;
 	private final LocalDateTime creationDate;
 	private final int upvotes;
 	private final int downvotes;

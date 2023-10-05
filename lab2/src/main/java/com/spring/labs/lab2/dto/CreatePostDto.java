@@ -5,6 +5,7 @@ import java.time.LocalDate;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
@@ -35,6 +36,12 @@ public class CreatePostDto {
 	@NotBlank
 	private String content;
 
+    @NotNull
+    @NotBlank
+    @Size( max = 30)
+    @Pattern(regexp = "^[a-zA-Z0-9.\n ]+$")
+    private String description;
+	
 	@NotNull
 	@NotBlank
 	private LocalDate creationDate;

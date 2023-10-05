@@ -36,7 +36,8 @@ public class PostController {
 		if (Optional.ofNullable(postId).isPresent()) {
 			Post post = postService.getById(postId);
 			CreatePostDto createPostDto = CreatePostDto.builder().username(post.getAuthor().getUsername())
-					.content(post.getContent()).upvotes(post.getUpvotes()).downvotes(post.getDownvotes()).build();
+					.content(post.getContent()).description(post.getDescription()).upvotes(post.getUpvotes())
+					.downvotes(post.getDownvotes()).build();
 			modelAndView.addObject("post", createPostDto);
 			modelAndView.addObject("postId", postId);
 		}
@@ -66,7 +67,7 @@ public class PostController {
 
 	@GetMapping({ "", "/all" })
 	public ModelAndView findAll() {
-		ModelAndView modelAndView = new ModelAndView("posts/dashboard");
+		ModelAndView modelAndView = new ModelAndView("posts/posts");
 		modelAndView.addObject("posts", postService.findAll());
 		return modelAndView;
 	}
