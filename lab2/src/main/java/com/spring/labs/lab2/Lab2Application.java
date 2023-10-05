@@ -3,6 +3,7 @@ package com.spring.labs.lab2;
 import com.spring.labs.lab2.dao.ForumCategoryDao;
 import com.spring.labs.lab2.dao.UserDao;
 import com.spring.labs.lab2.service.ForumCategoryService;
+import com.spring.labs.lab2.service.TopicService;
 import com.spring.labs.lab2.service.UserService;
 import com.spring.labs.lab2.service.UserServiceImpl;
 import net.datafaker.Faker;
@@ -24,10 +25,11 @@ public class Lab2Application {
     }
 
     @Bean
-    CommandLineRunner runner(UserService userDao, ForumCategoryService forumCategoryDao) {
+    CommandLineRunner runner(UserService userDao, ForumCategoryService forumCategoryDao, TopicService topicDao) {
         return args -> {
             userDao.generateDefaultUsers(100, dataFaker());
             forumCategoryDao.generateDefaultCategories(15, dataFaker());
+            topicDao.generateDefaultTopics(15, dataFaker());
         };
     }
 
