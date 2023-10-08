@@ -105,7 +105,8 @@ public class PostServiceImpl implements PostService {
 				.downvotes(random.nextInt(maxDownvotes - minDownvotes + 1) + minDownvotes).build()).forEach(dao::save);
 	}
 
-	private Post findByPostName(String postName) {
+	@Override
+	public Post findByPostName(String postName) {
 		return dao.findByName(postName);
 	}
 }

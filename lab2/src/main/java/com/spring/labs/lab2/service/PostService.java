@@ -27,4 +27,6 @@ public interface PostService {
 	void generateDefaultPosts(Integer size, Faker faker);
 
 	List<Post>findByTopicName(String topicName);
+
+	public Object findByPostName(String name);
 }
