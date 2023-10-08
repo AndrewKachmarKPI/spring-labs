@@ -10,12 +10,14 @@ public interface PostDao {
 
 	List<Post> findAll();
 
-	Post findById(Long id); 
+	Post findById(Long id);
 
-	Post findByName(String postName);
+	Post findByName(String name);
 
-    boolean existByName(String categoryName);
-	
+	Post findByTopicName(String postName);
+
+	boolean existByName(String categoryName);
+
 	void deleteByName(String postName);
-	
- }
+
+}

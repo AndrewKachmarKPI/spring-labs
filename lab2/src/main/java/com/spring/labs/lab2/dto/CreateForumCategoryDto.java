@@ -17,11 +17,11 @@ public class CreateForumCategoryDto {
     private String categoryName;
     @NotNull
     @NotBlank
-    @Size(min = 10, max = 500)
+    @Size( max = 500)
     @Pattern(regexp = "^[a-zA-Z0-9.\n ]+$")
     private String description;
     @NotNull
     @NotBlank
-    @Pattern(regexp = "^[a-zA-Z0-9.]+$")
+    @Pattern(regexp = "^[a-zA-Z0-9.]+$ ")
     private String username;
 }

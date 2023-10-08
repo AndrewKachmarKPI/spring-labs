@@ -18,14 +18,14 @@ public class FakePostDao implements PostDao {
 	private final Map<String, Post> posts = new HashMap<>();
 
 	@Override
-	public Post save(Post post) {
-		if (Optional.ofNullable(post.getId()).isEmpty()) {
-			post = post.toBuilder().id((long) posts.size() + 1).build();
+	public Post save(Post savedPost) {
+		if (Optional.ofNullable(savedPost.getId()).isEmpty()) {
+			savedPost = savedPost.toBuilder().id((long) posts.size() + 1).build();
 		} else {
-			post = findById(post.getId());
+			Post post = findById(savedPost.getId());
 			posts.remove(post.getName());
 		}
-		return posts.put(post.getName(), post);
+		return posts.put(savedPost.getName(), savedPost);
 	}
 
 	@Override
@@ -40,11 +40,19 @@ public class FakePostDao implements PostDao {
 	}
 
 	@Override
-	public Post findByName(String postName) {
-		if (!existByName(postName)) {
+	public Post findByName(String name) {
+		if (!existByName(name)) {
 			throw new RuntimeException("Post is not found");
 		}
-		return posts.get(postName);
+		return posts.get(name);
+	}
+	
+	@Override
+	public Post findByTopicName(String topicName) {
+	    Optional<Post> matchingPost = posts.values().stream()
+	            .filter(post -> post.getTopic() != null && topicName.equals(post.getTopic().getTitle()))
+	            .findFirst();
+	    return matchingPost.orElse(null);
 	}
 
 	@Override
@@ -59,5 +67,4 @@ public class FakePostDao implements PostDao {
 	public boolean existByName(String postName) {
 		return posts.containsKey(postName);
 	}
-
 }

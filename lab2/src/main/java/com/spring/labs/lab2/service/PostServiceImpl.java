@@ -3,14 +3,16 @@ package com.spring.labs.lab2.service;
 import java.time.LocalDateTime;
 import java.util.List; 
 import java.util.Random;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
- 
+
 import org.springframework.stereotype.Service;
- 
-import com.spring.labs.lab2.dao.PostDao; 
+
+import com.spring.labs.lab2.dao.PostDao;
 import com.spring.labs.lab2.domain.Post;
-import com.spring.labs.lab2.domain.User; 
+import com.spring.labs.lab2.domain.Topic;
+import com.spring.labs.lab2.domain.User;
 import com.spring.labs.lab2.dto.CreatePostDto;
 
 import lombok.RequiredArgsConstructor;
@@ -22,7 +24,7 @@ public class PostServiceImpl implements PostService {
 
 	private final PostDao dao;
 	private final UserService userService;
-	private final Faker faker;
+	private final TopicService topicService;
 
 	public List<Post> getAllPosts() {
 		return dao.findAll();
@@ -44,19 +46,19 @@ public class PostServiceImpl implements PostService {
 	@Override
 	public Post createPost(CreatePostDto createPost) {
 		if (dao.existByName(createPost.getName())) {
-			throw new RuntimeException("Category with name " + createPost.getName() + " already exists");
+			throw new RuntimeException("Post with name " + createPost.getName() + " already exists");
 		}
-		Post post = Post.builder().content(createPost.getContent()).name(createPost.getName())
-				.author(userService.findUserByName(createPost.getUsername())).creationDate(LocalDateTime.now()).build();
-
+		Post post = Post.builder().name(createPost.getName())
+				.author(userService.findUserByName(createPost.getUsername())).description(createPost.getDescription())
+				.creationDate(LocalDateTime.now()).build();
 		return dao.save(post);
 	}
 
 	@Override
 	public Post update(CreatePostDto createPost, Long postId) {
 		Post post = findById(postId);
-		post = post.toBuilder().content(createPost.getContent()).name(createPost.getName())
-				.author(userService.findUserByName(createPost.getUsername())).build();
+		post = post.toBuilder().name(createPost.getName()).author(userService.findUserByName(createPost.getUsername()))
+				.description(createPost.getDescription()).build();
 		return dao.save(post);
 	}
 
@@ -66,8 +68,9 @@ public class PostServiceImpl implements PostService {
 	}
 
 	@Override
-	public Post findByName(String postName) {
-		return dao.findByName(postName);
+	public List<Post> findByTopicName(String topicTitle) {
+		return dao.findAll().stream().filter(post -> post.getTopic().getTitle().equals(topicTitle))
+				.collect(Collectors.toList());
 	}
 
 	@Override
@@ -77,7 +80,7 @@ public class PostServiceImpl implements PostService {
 
 	@Override
 	public Post changeAuthor(String postName, String username) {
-		Post post = findByName(postName);
+		Post post = findByPostName(postName);
 		User user = userService.findUserByName(username);
 		post = post.toBuilder().author(user).build();
 		return dao.save(post);
@@ -85,14 +88,24 @@ public class PostServiceImpl implements PostService {
 
 	@Override
 	public void generateDefaultPosts(Integer size, Faker faker) {
+		Random random = new Random();
+		int maxUpvotes = 10000;
+		int minUpvotes = 100;
+		int maxDownvotes = 500;
+		int minDownvotes = 3;
 		List<String> postNames = Stream.generate(() -> faker.lorem().sentence(2)).distinct().limit(size + 1).toList();
 		List<String> usernames = userService.findAll().stream().map(User::getUsername).toList();
+		List<Topic> topics = topicService.findAll();
 		IntStream.range(1, size + 1).mapToObj(index -> Post.builder()
 				.creationDate(LocalDateTime.now().minusDays(new Random().nextInt(0, 3))).name(postNames.get(index))
-				.content(faker.lorem().sentence(50))
-				.description(faker.lorem().sentence(2))
-				.author(userService.findUserByName(usernames.get(new Random().nextInt(usernames.size())))).build())
-				.forEach(dao::save);
+				.content(faker.lorem().sentence(50)).description(faker.lorem().sentence(2))
+				.author(userService.findUserByName(usernames.get(new Random().nextInt(usernames.size()))))
+				.topic(topics.get(random.nextInt(0, topics.size())))
+				.upvotes(random.nextInt(maxUpvotes - minUpvotes + 1) + minUpvotes)
+				.downvotes(random.nextInt(maxDownvotes - minDownvotes + 1) + minDownvotes).build()).forEach(dao::save);
 	}
 
+	private Post findByPostName(String postName) {
+		return dao.findByName(postName);
+	}
 }

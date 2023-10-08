@@ -12,7 +12,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
-import com.spring.labs.lab2.domain.Post;
+
+import com.spring.labs.lab2.domain.Post; 
 import com.spring.labs.lab2.dto.CreatePostDto;
 import com.spring.labs.lab2.service.PostService;
 import com.spring.labs.lab2.service.UserService;
@@ -28,41 +29,19 @@ public class PostController {
 	@Autowired
 	private UserService userService;
 
-	@GetMapping({ "/create", "/create/{postId}" })
-	public ModelAndView getAllPosts(@PathVariable(value = "postId", required = false) long postId) {
-		ModelAndView modelAndView = new ModelAndView("categories/create");
+	@GetMapping({ "/create", "/create/{id}" })
+	public ModelAndView createPost(@PathVariable(value = "id", required = false) Long id) {
+		ModelAndView modelAndView = new ModelAndView("posts/create");
 		modelAndView.addObject("post", new CreatePostDto());
 		modelAndView.addObject("users", userService.findAll());
-		if (Optional.ofNullable(postId).isPresent()) {
-			Post post = postService.getById(postId);
-			CreatePostDto createPostDto = CreatePostDto.builder().username(post.getAuthor().getUsername())
-					.content(post.getContent()).description(post.getDescription()).upvotes(post.getUpvotes())
-					.downvotes(post.getDownvotes()).build();
+		if (Optional.ofNullable(id).isPresent()) {
+			Post post = postService.findById(id);
+			CreatePostDto createPostDto = CreatePostDto.builder().name(post.getName())
+					.description(post.getDescription()).username(post.getAuthor().getUsername()).build();
 			modelAndView.addObject("post", createPostDto);
-			modelAndView.addObject("postId", postId);
+			modelAndView.addObject("id", id);
 		}
 		return modelAndView;
-	}
-
-	@PostMapping({ "/create" })
-	public ModelAndView create(@Valid @ModelAttribute("posts") CreatePostDto post, BindingResult bindingResult,
-			@RequestParam(value = "postId", required = false) Long postId) {
-		ModelAndView modelAndView = new ModelAndView("posts/create");
-		if (bindingResult.hasFieldErrors()) {
-			return modelAndView.addObject("users", userService.findAll());
-		}
-
-		try {
-			if (Optional.ofNullable(postId).isEmpty()) {
-				postService.createPost(post);
-			} else {
-				System.out.println("UPDATE");
-				postService.update(post, postId);
-			}
-		} catch (Exception e) {
-			return modelAndView.addObject("errorMessage", e.getMessage()).addObject("users", userService.findAll());
-		}
-		return new ModelAndView("redirect:/posts/all");
 	}
 
 	@GetMapping({ "", "/all" })
@@ -72,21 +51,50 @@ public class PostController {
 		return modelAndView;
 	}
 
-	@PostMapping("/delete")
-	public ModelAndView deleteByName(@RequestParam String postName) {
-		postService.deleteByName(postName);
+    @GetMapping({"/{name}", "/all/{name}"})
+    public ModelAndView findAll(@PathVariable("name") String name) {
+        ModelAndView modelAndView = new ModelAndView("posts/posts");
+        modelAndView.addObject("posts", postService.findByTopicName(name));
+        modelAndView.addObject("name", name);
+        return modelAndView;
+    }
+
+	@PostMapping({ "/create" })
+	public ModelAndView create(@Valid @ModelAttribute("post") CreatePostDto post, BindingResult bindingResult,
+			@RequestParam(value = "id", required = false) Long id) {
+		ModelAndView modelAndView = new ModelAndView("posts/create");
+		if (bindingResult.hasFieldErrors()) {
+			return modelAndView.addObject("users", userService.findAll());
+		}
+
+		try {
+			if (Optional.ofNullable(id).isEmpty()) {
+				postService.createPost(post);
+			} else {
+				System.out.println("UPDATE post");
+				postService.update(post, id);
+			}
+		} catch (Exception e) {
+			return modelAndView.addObject("error Message", e.getMessage()).addObject("users", userService.findAll());
+		}
 		return new ModelAndView("redirect:/posts/all");
 	}
 
 	@GetMapping("/find")
-	public ModelAndView findPostByName() {
+	public ModelAndView findByName() {
 		return new ModelAndView("findPost");
 	}
 
 	@PostMapping("/find")
-	public ModelAndView findByName(@RequestParam("postName") String postName) {
-		ModelAndView modelAndView = new ModelAndView("post");
-		modelAndView.addObject("postName", postService.findByName(postName));
+	public ModelAndView findByName(@RequestParam("title") String title) {
+		ModelAndView modelAndView = new ModelAndView("posts");
+		modelAndView.addObject("posts", postService.findByTopicName(title));
 		return modelAndView;
+	}
+
+	@PostMapping("/delete")
+	public ModelAndView deleteByName(@RequestParam("name") String name) {
+		postService.deleteByName(name);
+		return new ModelAndView("redirect:/posts/" + name);
 	}
 }

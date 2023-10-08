@@ -1,5 +1,5 @@
 package com.spring.labs.lab2.domain;
- 
+
 import java.time.LocalDateTime;
 
 import lombok.AllArgsConstructor;
@@ -15,11 +15,11 @@ public class Post {
 
 	private final Long id;
 	private final User author;
-//	private final Topic topic
+	private final Topic topic;
 	private final String name;
 	private final String content;
 	private final String description;
 	private final LocalDateTime creationDate;
-	private final int upvotes;
+	private final int upvotes; 
 	private final int downvotes;
 }

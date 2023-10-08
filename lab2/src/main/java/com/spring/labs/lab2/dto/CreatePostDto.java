@@ -1,7 +1,5 @@
 package com.spring.labs.lab2.dto;
 
-import java.time.LocalDate;
-
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
@@ -20,37 +18,18 @@ import lombok.Setter;
 @AllArgsConstructor
 @Builder(toBuilder = true)
 public class CreatePostDto {
-
+	
 	@NotNull
 	@NotBlank
 	@Pattern(regexp = "^[a-zA-Z0-9.]+$")
 	private String username;
-//	private   Topic topic
-
 	@NotNull
 	@NotBlank
-	@Pattern(regexp = "^[a-zA-Z0-9.]+$")
+	@Pattern(regexp = "^[a-zA-Z0-9. ]+$")
 	private String name;
-
 	@NotNull
 	@NotBlank
-	private String content;
-
-    @NotNull
-    @NotBlank
-    @Size( max = 30)
-    @Pattern(regexp = "^[a-zA-Z0-9.\n ]+$")
-    private String description;
-	
-	@NotNull
-	@NotBlank
-	private LocalDate creationDate;
-
-	@NotNull
-	@NotBlank
-	private int upvotes;
-
-	@NotNull
-	@NotBlank
-	private int downvotes;
+	@Size(max = 50)
+	@Pattern(regexp = "^[a-zA-Z0-9.\n ]+$")
+	private String description;
 }
