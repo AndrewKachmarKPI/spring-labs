@@ -70,12 +70,13 @@ public class PostServiceImpl implements PostService {
 		int minUpvotes = 100;
 		int maxDownvotes = 500;
 		int minDownvotes = 3;
+		int contentSentences = 400;
 		List<String> postNames = Stream.generate(() -> faker.lorem().sentence(2)).distinct().limit(size + 1).toList();
 		List<String> usernames = userService.findAll().stream().map(User::getUsername).toList();
 		List<Topic> topics = topicService.findAll();
 		IntStream.range(1, size + 1).mapToObj(index -> Post.builder()
 				.creationDate(LocalDateTime.now().minusDays(new Random().nextInt(0, 3))).name(postNames.get(index))
-				.content(faker.lorem().sentence(50)).description(faker.lorem().sentence(2))
+				.content(faker.lorem().sentence(contentSentences)).description(faker.lorem().sentence(2))
 				.author(userService.findUserByName(usernames.get(new Random().nextInt(usernames.size()))))
 				.topic(topics.get(random.nextInt(0, topics.size())))
 				.upvotes(random.nextInt(maxUpvotes - minUpvotes + 1) + minUpvotes)
