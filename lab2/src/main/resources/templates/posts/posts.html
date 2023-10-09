@@ -113,8 +113,8 @@
                     >
                     <a
                       type="button"
-                      class="btn btn-sm btn-outline-success"
-                      th:href="@{/posts/create/{id}(id = ${post.id})}"
+                      class="btn btn-sm btn-outline-success" 
+                      th:href="@{/posts/create/{id}/{topicTitle}(id = ${post.id}, topicTitle = ${topicTitle})}"
                       >Edit</a
                     >
                     <button type="submit" class="btn btn-sm btn-outline-danger">

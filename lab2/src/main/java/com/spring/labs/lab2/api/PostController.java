@@ -49,22 +49,6 @@ public class PostController {
 		return modelAndView;
 	}
 
-	@GetMapping({ "/{topicTitle}" })
-	public ModelAndView findPostsByTitle(@PathVariable("topicTitle") String topicTitle) {
-		ModelAndView modelAndView = new ModelAndView("posts/posts");
-		modelAndView.addObject("posts", postService.findByTopicName(topicTitle));
-		modelAndView.addObject("topicTitle", topicTitle);
-		return modelAndView;
-	}
-
-	@GetMapping({ "/post/{name}" })
-	public ModelAndView findAll(@PathVariable("name") String name) {
-		ModelAndView modelAndView = new ModelAndView("posts/post");
-		modelAndView.addObject("post", postService.findByPostName(name));
-		modelAndView.addObject("name", name);
-		return modelAndView;
-	}
-
 	@PostMapping({ "/create" })
 	public ModelAndView create(@Valid @ModelAttribute("post") CreatePostDto post, BindingResult bindingResult,
 			@RequestParam(value = "id", required = false) Long id, @RequestParam("topicTitle") String topicTitle) {
@@ -87,6 +71,22 @@ public class PostController {
 		}
 		return new ModelAndView("redirect:/posts/" + topicTitle);
 	}
+	@GetMapping({ "/{topicTitle}" })
+	public ModelAndView findPostsByTitle(@PathVariable("topicTitle") String topicTitle) {
+		ModelAndView modelAndView = new ModelAndView("posts/posts");
+		modelAndView.addObject("posts", postService.findByTopicName(topicTitle));
+		modelAndView.addObject("topicTitle", topicTitle);
+		return modelAndView;
+	}
+
+	@GetMapping({ "/post/{name}" })
+	public ModelAndView findAll(@PathVariable("name") String name) {
+		ModelAndView modelAndView = new ModelAndView("posts/post");
+		modelAndView.addObject("post", postService.findByPostName(name));
+		modelAndView.addObject("name", name);
+		return modelAndView;
+	}
+
 
 	@PostMapping("/delete")
 	public ModelAndView deleteByName(@RequestParam String name, @RequestParam("topic") String topic) {
