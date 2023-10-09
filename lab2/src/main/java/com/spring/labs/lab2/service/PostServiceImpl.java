@@ -115,6 +115,7 @@ public class PostServiceImpl implements PostService {
         Post post = Post.builder()
                 .content(postDto.getContent())
                 .description(postDto.getDescription()) 
+                .name(postDto.getName()) 
                 .author(userService.findUserByName(postDto.getAuthor()))
                 .creationDate(LocalDateTime.now())
                 .topic((Topic) topicService.findByName(topicTitle))
