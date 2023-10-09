@@ -23,9 +23,5 @@ public class Post {
 	private String description;
 	private LocalDateTime creationDate;
 	private int upvotes;
-	private int downvotes;
-
-	public void setId(long leastSignificantBits) {
-		this.id = leastSignificantBits;
-	}
+	private int downvotes; 
 }
