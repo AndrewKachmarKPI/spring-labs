@@ -28,37 +28,22 @@ public class PostServiceImpl implements PostService {
 
 	public List<Post> getAllPosts() {
 		return dao.findAll();
-	}
-
-	public Post getById(Long id) {
-		return dao.findById(id);
-	}
+	} 
 
 	public void createPost(Post post) {
 		dao.save(post);
 	}
 
-	@Override
-	public List<Post> findAll() {
-		return dao.findAll();
-	}
-
-	@Override
-	public Post createPost(CreatePostDto createPost) {
-		if (dao.existByName(createPost.getName())) {
-			throw new RuntimeException("Post with name " + createPost.getName() + " already exists");
-		}
-		Post post = Post.builder().name(createPost.getName())
-				.author(userService.findUserByName(createPost.getAuthor())).description(createPost.getDescription())
-				.creationDate(LocalDateTime.now()).build();
-		return dao.save(post);
-	}
 
 	@Override
 	public Post update(CreatePostDto createPost, Long postId) {
 		Post post = findById(postId);
-		post = post.toBuilder().name(createPost.getName()).author(userService.findUserByName(createPost.getAuthor()))
-				.description(createPost.getDescription()).build();
+		post = post.toBuilder()
+				.name(createPost.getName())
+				.author(userService.findUserByName(createPost.getAuthor()))
+				.description(createPost.getDescription())
+				.content(createPost.getContent())
+				.build();
 		return dao.save(post);
 	}
 
@@ -76,15 +61,7 @@ public class PostServiceImpl implements PostService {
 	@Override
 	public Post findById(Long id) {
 		return dao.findById(id);
-	}
-
-	@Override
-	public Post changeAuthor(String postName, String username) {
-		Post post = findByPostName(postName);
-		User user = userService.findUserByName(username);
-		post = post.toBuilder().author(user).build();
-		return dao.save(post);
-	}
+	} 
 
 	@Override
 	public void generateDefaultPosts(Integer size, Faker faker) {
