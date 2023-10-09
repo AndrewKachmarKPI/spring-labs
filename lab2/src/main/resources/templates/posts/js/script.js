@@ -1,5 +1,7 @@
+<script th:inline="javascript">var nameJs = /*[[${name}]]*/;</script>;
 function toggleLikeCounter(likeIcon) {
-  const likeCount = likeIcon.parentElement.querySelector(".like-count");
+  const likeCount =
+    likeIcon.parentElement.nextElementSibling.querySelector(".like-count");
   const dislikeCount =
     likeIcon.parentElement.nextElementSibling.querySelector(".dislike-count");
   let likeValue = parseInt(likeCount.textContent);
@@ -12,7 +14,6 @@ function toggleLikeCounter(likeIcon) {
     likeValue++;
     likeIcon.classList.add("active");
 
-    // Если иконка дизлайка была активной, уменьшаем её счёт и убираем активный класс
     if (
       likeIcon.parentElement.nextElementSibling
         .querySelector(".dislike-icon")
@@ -45,7 +46,7 @@ function toggleDislikeCounter(dislikeIcon) {
   } else {
     dislikeValue++;
     dislikeIcon.classList.add("active");
- 
+
     if (
       dislikeIcon.parentElement.previousElementSibling
         .querySelector(".like-icon")
@@ -61,6 +62,3 @@ function toggleDislikeCounter(dislikeIcon) {
   likeCount.textContent = likeValue;
   dislikeCount.textContent = dislikeValue;
 }
-
-
- 

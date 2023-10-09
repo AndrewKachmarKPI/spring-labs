@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.UUID;
 
 import org.springframework.stereotype.Repository;
 
@@ -19,8 +20,9 @@ public class FakePostDao implements PostDao {
 
 	@Override
 	public Post save(Post savedPost) {
+		UUID uuid = UUID.randomUUID();
 		if (Optional.ofNullable(savedPost.getId()).isEmpty()) {
-			savedPost = savedPost.toBuilder().id((long) posts.size() + 1).build();
+			savedPost.setId(uuid.getLeastSignificantBits());
 		} else {
 			Post post = findById(savedPost.getId());
 			posts.remove(post.getName());
@@ -46,13 +48,12 @@ public class FakePostDao implements PostDao {
 		}
 		return posts.get(name);
 	}
-	
+
 	@Override
 	public Post findByTopicName(String topicName) {
-	    Optional<Post> matchingPost = posts.values().stream()
-	            .filter(post -> post.getTopic() != null && topicName.equals(post.getTopic().getTitle()))
-	            .findFirst();
-	    return matchingPost.orElse(null);
+		Optional<Post> matchingPost = posts.values().stream()
+				.filter(post -> post.getTopic() != null && topicName.equals(post.getTopic().getTitle())).findFirst();
+		return matchingPost.orElse(null);
 	}
 
 	@Override

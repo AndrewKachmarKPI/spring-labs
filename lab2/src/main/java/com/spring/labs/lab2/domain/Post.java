@@ -5,21 +5,27 @@ import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.Setter;
 import lombok.ToString;
 
 @Getter
+@Setter
 @ToString
 @AllArgsConstructor
 @Builder(toBuilder = true)
 public class Post {
 
-	private final Long id;
-	private final User author;
-	private final Topic topic;
-	private final String name;
-	private final String content;
-	private final String description;
-	private final LocalDateTime creationDate;
-	private final int upvotes; 
-	private final int downvotes;
+	private Long id;
+	private User author;
+	private Topic topic;
+	private String name;
+	private String content;
+	private String description;
+	private LocalDateTime creationDate;
+	private int upvotes;
+	private int downvotes;
+
+	public void setId(long leastSignificantBits) {
+		this.id = leastSignificantBits;
+	}
 }

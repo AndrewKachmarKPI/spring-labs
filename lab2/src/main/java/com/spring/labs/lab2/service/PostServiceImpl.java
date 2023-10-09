@@ -49,7 +49,7 @@ public class PostServiceImpl implements PostService {
 			throw new RuntimeException("Post with name " + createPost.getName() + " already exists");
 		}
 		Post post = Post.builder().name(createPost.getName())
-				.author(userService.findUserByName(createPost.getUsername())).description(createPost.getDescription())
+				.author(userService.findUserByName(createPost.getAuthor())).description(createPost.getDescription())
 				.creationDate(LocalDateTime.now()).build();
 		return dao.save(post);
 	}
@@ -57,7 +57,7 @@ public class PostServiceImpl implements PostService {
 	@Override
 	public Post update(CreatePostDto createPost, Long postId) {
 		Post post = findById(postId);
-		post = post.toBuilder().name(createPost.getName()).author(userService.findUserByName(createPost.getUsername()))
+		post = post.toBuilder().name(createPost.getName()).author(userService.findUserByName(createPost.getAuthor()))
 				.description(createPost.getDescription()).build();
 		return dao.save(post);
 	}
@@ -108,5 +108,18 @@ public class PostServiceImpl implements PostService {
 	@Override
 	public Post findByPostName(String postName) {
 		return dao.findByName(postName);
+	}
+
+	@Override
+	public Post createPost(CreatePostDto postDto, String topicTitle) {
+        Post post = Post.builder()
+                .content(postDto.getContent())
+                .description(postDto.getDescription()) 
+                .author(userService.findUserByName(postDto.getAuthor()))
+                .creationDate(LocalDateTime.now())
+                .topic((Topic) topicService.findByName(topicTitle))
+                .build();
+        dao.save(post);
+        return post;
 	}
 }

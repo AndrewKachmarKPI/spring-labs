@@ -31,7 +31,7 @@
           </h3>
           <a
             class="btn btn-outline-success"
-            href="@{/posts/create/{name}(name = ${name})}"
+            th:href="@{/posts/create/{topicTitle}(topicTitle = ${topicTitle})}"
             >Create post</a
           >
         </div>
@@ -40,7 +40,7 @@
             <h3 class="text-center">No post found!</h3>
             <a
               class="btn btn-lg btn-primary"
-              href="@{/posts/create/{name}(name = ${name})}"
+              th:href="@{/posts/create/{name}(name = ${title})}"
               >Create post</a
             >
           </div>
@@ -92,7 +92,7 @@
             <div class="card-footer">
               <div class="d-flex justify-content-between align-items-center">
                 <form method="post" th:action="@{/posts/delete}">
-                     <input
+                  <input
                     type="text"
                     class="d-none"
                     th:name="topic"

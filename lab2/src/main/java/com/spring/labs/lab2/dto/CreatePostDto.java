@@ -22,7 +22,7 @@ public class CreatePostDto {
 	@NotNull
 	@NotBlank
 	@Pattern(regexp = "^[a-zA-Z0-9.]+$")
-	private String username;
+	private String author;
 	@NotNull
 	@NotBlank
 	@Pattern(regexp = "^[a-zA-Z0-9. ]+$")
@@ -32,4 +32,9 @@ public class CreatePostDto {
 	@Size(max = 50)
 	@Pattern(regexp = "^[a-zA-Z0-9.\n ]+$")
 	private String description;
+	@NotNull
+	@NotBlank
+	@Size(min = 1)
+	@Pattern(regexp = "^[a-zA-Z0-9.\n ]+$")
+	private String content;
 }
