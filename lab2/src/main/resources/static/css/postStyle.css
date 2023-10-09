@@ -33,10 +33,6 @@
   .dislike-icon.active path {
     fill: #007bff;  
   }
-/* posts menu styles  */
- .category-divider {
-  border: 1px solid #ccc; /* Цвет линии и её стиль можно настроить */
-  margin: 20px 0; /* Расстояние между линиями и содержимым постов */
-}
+ 
 
  

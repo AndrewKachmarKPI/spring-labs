@@ -1,8 +1,10 @@
 function toggleLikeCounter(likeIcon) {
-  const likeCount =
-    likeIcon.parentElement.nextElementSibling.querySelector(".like-count");
+  const likeCount = likeIcon.parentElement.querySelector(".like-count");
+  const dislikeIcon =
+    likeIcon.parentElement.nextElementSibling.querySelector(".dislike-icon");
   const dislikeCount =
-    likeIcon.parentElement.nextElementSibling.querySelector(".dislike-count");
+    dislikeIcon.parentElement.querySelector(".dislike-count");
+
   let likeValue = parseInt(likeCount.textContent);
   let dislikeValue = parseInt(dislikeCount.textContent);
 
@@ -13,15 +15,9 @@ function toggleLikeCounter(likeIcon) {
     likeValue++;
     likeIcon.classList.add("active");
 
-    if (
-      likeIcon.parentElement.nextElementSibling
-        .querySelector(".dislike-icon")
-        .classList.contains("active")
-    ) {
+    if (dislikeIcon.classList.contains("active")) {
       dislikeValue--;
-      likeIcon.parentElement.nextElementSibling
-        .querySelector(".dislike-icon")
-        .classList.remove("active");
+      dislikeIcon.classList.remove("active");
     }
   }
 
@@ -32,10 +28,12 @@ function toggleLikeCounter(likeIcon) {
 function toggleDislikeCounter(dislikeIcon) {
   const dislikeCount =
     dislikeIcon.parentElement.querySelector(".dislike-count");
-  const likeCount =
+  const likeIcon =
     dislikeIcon.parentElement.previousElementSibling.querySelector(
-      ".like-count"
+      ".like-icon"
     );
+  const likeCount = likeIcon.parentElement.querySelector(".like-count");
+
   let dislikeValue = parseInt(dislikeCount.textContent);
   let likeValue = parseInt(likeCount.textContent);
 
@@ -46,15 +44,9 @@ function toggleDislikeCounter(dislikeIcon) {
     dislikeValue++;
     dislikeIcon.classList.add("active");
 
-    if (
-      dislikeIcon.parentElement.previousElementSibling
-        .querySelector(".like-icon")
-        .classList.contains("active")
-    ) {
+    if (likeIcon.classList.contains("active")) {
       likeValue--;
-      dislikeIcon.parentElement.previousElementSibling
-        .querySelector(".like-icon")
-        .classList.remove("active");
+      likeIcon.classList.remove("active");
     }
   }
 
