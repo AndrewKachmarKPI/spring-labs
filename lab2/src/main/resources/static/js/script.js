@@ -1,4 +1,3 @@
-<script th:inline="javascript">var nameJs = /*[[${name}]]*/;</script>;
 function toggleLikeCounter(likeIcon) {
   const likeCount =
     likeIcon.parentElement.nextElementSibling.querySelector(".like-count");
