@@ -21,20 +21,19 @@ public class CreatePostDto {
 	
 	@NotNull
 	@NotBlank
-	@Pattern(regexp = "^[a-zA-Z0-9.]+$")
 	private String author;
 	@NotNull
 	@NotBlank
-	@Pattern(regexp = "^[a-zA-Z0-9. ]+$")
+	@Pattern(regexp = "^[a-zA-Z0-9.\\s]+$")
 	private String name;
 	@NotNull
 	@NotBlank
 	@Size(max = 50)
-	@Pattern(regexp = "^[a-zA-Z0-9.\n ]+$")
+	@Pattern(regexp = "^[a-zA-Z0-9.\\s\\n]+$")
 	private String description;
 	@NotNull
 	@NotBlank
 	@Size(min = 1)
-	@Pattern(regexp = "^[a-zA-Z0-9.\n ]+$")
+	@Pattern(regexp = "^[a-zA-Z0-9.\\s\\n]+$")
 	private String content;
 }
