@@ -1,18 +1,12 @@
 package com.spring.labs.lab2.dao;
 
-import com.spring.labs.lab2.domain.User;
-import com.spring.labs.lab2.enums.UserRole;
-import lombok.RequiredArgsConstructor;
-import net.datafaker.Faker;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.spring.labs.lab2.domain.User; 
+import lombok.RequiredArgsConstructor; 
 import org.springframework.stereotype.Repository;
 
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
-import java.util.stream.Stream;
+import java.util.Map; 
 
 @Repository
 @RequiredArgsConstructor

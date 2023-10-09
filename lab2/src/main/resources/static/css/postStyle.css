@@ -1,0 +1,38 @@
+/* like and dislike styles  */
+.like-container,
+.dislike-container {
+  display: inline-flex;
+  align-items: center;
+  cursor: pointer;
+  margin-right: 20px;  
+}
+
+.like-icon,
+.dislike-icon {
+  fill: #555;  
+  transition: fill 0.2s; 
+}
+
+.like-text,
+.dislike-text {
+  margin-left: 5px;
+  display: none;
+}
+
+.like-container:hover .like-icon,
+.dislike-container:hover .dislike-icon {
+  fill: black;  
+}
+
+.like-container:hover .like-text,
+.dislike-container:hover .dislike-text {
+  display: inline;  
+}
+
+  .like-icon.active path,
+  .dislike-icon.active path {
+    fill: #007bff;  
+  }
+ 
+
+ 

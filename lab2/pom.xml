@@ -50,15 +50,14 @@
 			<groupId>net.datafaker</groupId>
 			<artifactId>datafaker</artifactId>
 			<version>2.0.1</version>
-		</dependency>
-
+		</dependency> 
 		<dependency>
 			<groupId>nz.net.ultraq.thymeleaf</groupId>
 			<artifactId>thymeleaf-layout-dialect</artifactId>
 			<version>2.3.0</version>
 		</dependency>
-	</dependencies>
-
+	</dependencies> 
+	
 	<build>
 		<plugins>
 			<plugin>

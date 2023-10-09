@@ -13,15 +13,14 @@ public class CreateForumCategoryDto {
     @NotNull
     @NotBlank
     @Size(min = 3, max = 50)
-    @Pattern(regexp = "^[a-zA-Z0-9. ]+$")
+    @Pattern(regexp = "^[a-zA-Z0-9.\\s]+$")
     private String categoryName;
     @NotNull
     @NotBlank
-    @Size(min = 10, max = 500)
-    @Pattern(regexp = "^[a-zA-Z0-9.\n ]+$")
+    @Size( max = 500)
+    @Pattern(regexp = "^[a-zA-Z0-9.\\n\\s]+$")
     private String description;
     @NotNull
     @NotBlank
-    @Pattern(regexp = "^[a-zA-Z0-9.]+$")
     private String username;
 }

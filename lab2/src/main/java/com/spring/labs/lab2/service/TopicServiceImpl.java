@@ -4,8 +4,7 @@ import com.spring.labs.lab2.dao.FakeTopicDao;
 import com.spring.labs.lab2.domain.ForumCategory;
 import com.spring.labs.lab2.domain.Topic;
 import com.spring.labs.lab2.domain.User;
-import com.spring.labs.lab2.dto.CreateTopicDto;
-import lombok.RequiredArgsConstructor;
+import com.spring.labs.lab2.dto.CreateTopicDto; 
 import net.datafaker.Faker;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -51,6 +50,11 @@ public class TopicServiceImpl implements TopicService {
                 .toList();
     }
 
+    @Override
+    public List<Topic> findAll( ) {
+        return topicDao.findAll();
+    }
+    
     @Override
     public Topic findById(Long id) {
         return topicDao.findById(id);

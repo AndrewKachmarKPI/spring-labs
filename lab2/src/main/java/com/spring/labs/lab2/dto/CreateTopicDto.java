@@ -16,15 +16,14 @@ public class CreateTopicDto {
     @NotNull
     @NotBlank
     @Size(min = 3, max = 50)
-    @Pattern(regexp = "^[a-zA-Z0-9. ]+$")
+    @Pattern(regexp = "^[a-zA-Z0-9.\\s]+$")
     private String title;
     @NotNull
     @NotBlank
     @Size(min = 10, max = 500)
-    @Pattern(regexp = "^[a-zA-Z0-9.\n ]+$")
+    @Pattern(regexp = "^[a-zA-Z0-9.\\n\\s]+$")
     private String content;
     @NotNull
     @NotBlank
-    @Pattern(regexp = "^[a-zA-Z0-9.]+$")
     private String author;
 }
