@@ -69,16 +69,6 @@ public class ForumCategoryServiceImpl implements ForumCategoryService {
     }
 
     @Override
-    public ForumCategory changeModerator(String categoryName, String username) {
-        ForumCategory forumCategory = findByName(categoryName);
-        User user = userService.findUserByName(username);
-        forumCategory = forumCategory.toBuilder()
-                .moderator(user)
-                .build();
-        return dao.save(forumCategory);
-    }
-
-    @Override
     public void generateDefaultCategories(Integer size, Faker faker) {
         List<String> categoryNames = Stream.generate(() -> faker.lorem().sentence(2)).distinct().limit(size + 1).toList();
         List<String> usernames = userService.findAll().stream().map(User::getUsername).toList();

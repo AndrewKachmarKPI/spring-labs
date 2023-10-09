@@ -31,7 +31,7 @@ public class Lab2Application {
     }
 
     @Bean
-    @Scope("singleton")
+    @Scope("prototype")
     Faker dataFaker() {
         return new Faker();
     }
