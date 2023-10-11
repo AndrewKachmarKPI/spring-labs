@@ -86,9 +86,17 @@
                     </strong>
                     <p class="m-0" th:text="${category.moderator.email}"></p>
                   </div>
-                  <span class="badge rounded-pill text-bg-secondary text-start"
-                    >Forum moderator</span
-                  >
+                    <th:block th:switch="${category.moderator.role.toString()}">
+                        <div th:case="'ADMIN'" class="badge rounded-pill text-bg-warning text-start">
+                            Admin moderator
+                        </div>
+                        <div th:case="'MODERATOR'" class="badge rounded-pill text-bg-secondary text-start">
+                            Moderator
+                        </div>
+                        <div th:case="'REGULAR_USER'" class="badge rounded-pill text-bg-primary text-start">
+                            User moderator
+                        </div>
+                    </th:block>
                 </div>
               </div>
             </div>
