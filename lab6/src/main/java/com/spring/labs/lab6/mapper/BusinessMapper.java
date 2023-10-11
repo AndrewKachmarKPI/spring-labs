@@ -7,6 +7,7 @@ import com.spring.labs.lab6.dto.UserDto;
 import com.spring.labs.lab6.dto.create.CreateUserDto;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
 import java.util.function.Function;
@@ -45,8 +46,27 @@ public class BusinessMapper {
                 .build();
     }
 
+    public UserEntity getUserEntity(UserDto createUserDto) {
+        return UserEntity.builder()
+                .username(createUserDto.getUsername())
+                .email(createUserDto.getEmail())
+                .password(createUserDto.getPassword())
+                .profilePicture(createUserDto.getProfilePicture())
+                .biography(createUserDto.getBiography())
+                .registrationDate(createUserDto.getRegistrationDate())
+                .role(createUserDto.getRole())
+                .build();
+    }
+
     public UserEntity getUserEntity(CreateUserDto createUserDto) {
         return UserEntity.builder()
+                .username(createUserDto.getUsername())
+                .email(createUserDto.getEmail())
+                .password(createUserDto.getPassword())
+                .profilePicture(createUserDto.getProfilePicture())
+                .biography(createUserDto.getBiography())
+                .registrationDate(LocalDateTime.now())
+                .role(createUserDto.getRole())
                 .build();
     }
 }
