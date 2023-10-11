@@ -6,6 +6,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import java.util.*;
+import java.util.stream.Collectors;
+
+import static java.util.Objects.isNull;
 
 @Repository
 @RequiredArgsConstructor
@@ -32,25 +35,24 @@ public class FakeForumCategoryDao implements ForumCategoryDao {
 
     @Override
     public int totalSize() {
-        return categories.values().size();
+        return categories.size();
     }
 
     @Override
-    public List<ForumCategory> findAllPageableAndFiltered(Integer offset, Integer limit, String title) {
-        List<ForumCategory> allCategories = new ArrayList<>(categories.values());
-        if (Optional.ofNullable(title).isPresent()) {
-            allCategories = allCategories.stream()
+    public List<ForumCategory> findAllPageableAndFiltered(Integer page, Integer pageSize, String title) {
+        List<ForumCategory> categoryList = findAll();
+        if (!isNull(title)) {
+            categoryList = categoryList.stream()
                     .filter(forumCategory -> forumCategory.getCategoryName().startsWith(title))
                     .toList();
         }
-        if (Optional.ofNullable(offset).isPresent() && Optional.ofNullable(limit).isPresent()) {
-            int endIndex = Math.min(offset + limit, allCategories.size());
-            if (offset >= allCategories.size() || offset < 0) {
-                return Collections.emptyList();
-            }
-            allCategories = allCategories.subList(offset, endIndex);
+        if (!isNull(page) && !isNull(pageSize)) {
+            categoryList = categoryList.stream()
+                    .skip((long) (page - 1) * pageSize)
+                    .limit(pageSize)
+                    .collect(Collectors.toList());
         }
-        return allCategories;
+        return categoryList;
     }
 
     @Override

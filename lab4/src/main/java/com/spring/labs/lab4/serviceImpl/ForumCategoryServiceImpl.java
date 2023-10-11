@@ -20,6 +20,8 @@ import java.util.Random;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
+import static java.util.Objects.isNull;
+
 @Service
 @RequiredArgsConstructor
 public class ForumCategoryServiceImpl implements ForumCategoryService {
@@ -57,18 +59,18 @@ public class ForumCategoryServiceImpl implements ForumCategoryService {
     @Override
     public PageDto<ForumCategory> findAll(Integer pageNumber, Integer pageSize, String title) {
         List<ForumCategory> categories = dao.findAllPageableAndFiltered(pageNumber, pageSize, title);
-        PageDto<ForumCategory> pageDto = PageDto.<ForumCategory>builder()
+        PageDto<ForumCategory> forumCategoryPageDto = PageDto.<ForumCategory>builder()
                 .data(categories)
-                .totalSize(dao.totalSize())
                 .page(pageNumber)
                 .size(pageSize)
+                .totalSize(dao.totalSize())
                 .build();
-        if (Optional.ofNullable(pageNumber).isPresent() && Optional.ofNullable(pageSize).isPresent()) {
-            pageDto = pageDto.toBuilder()
-//                    .totalPage(dao.totalSize() / pageSize) //FIXME
+        if (!isNull(pageNumber) && !isNull(pageSize)) {
+            forumCategoryPageDto = forumCategoryPageDto.toBuilder()
+                    .totalPage((int) Math.ceil((double) dao.totalSize() / pageSize))
                     .build();
         }
-        return pageDto;
+        return forumCategoryPageDto;
     }
 
     @Override

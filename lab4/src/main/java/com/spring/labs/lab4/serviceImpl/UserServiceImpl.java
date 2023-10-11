@@ -4,11 +4,13 @@ package com.spring.labs.lab4.serviceImpl;
 import com.spring.labs.lab4.dao.UserDao;
 import com.spring.labs.lab4.domain.User;
 import com.spring.labs.lab4.enums.UserRole;
+import com.spring.labs.lab4.exceptions.ResourceNotFoundException;
 import com.spring.labs.lab4.service.UserService;
 import net.datafaker.Faker;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
@@ -22,7 +24,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User findUserByName(String username) {
-        return userDao.findByName(username);
+        return Optional.ofNullable(userDao.findByName(username))
+                .orElseThrow(() -> new ResourceNotFoundException("User with name:" + username + " is not found"));
     }
 
     @Override
