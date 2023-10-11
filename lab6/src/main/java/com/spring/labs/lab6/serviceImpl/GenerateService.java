@@ -32,9 +32,9 @@ public class GenerateService implements DefaultGenerateMethods {
 
     @Override
     public void generateDefaultCategories(Integer size, Faker faker) {
-        List<String> categoryNames = Stream.generate(() -> faker.lorem().sentence(2)).distinct().limit(size + 1).toList();
-        List<UserDto> users = generateDefaultUsers(size, faker);
-        IntStream.range(1, size + 1).mapToObj(index -> ForumCategoryEntity.builder()
+        List<String> categoryNames = Stream.generate(() -> faker.lorem().sentence(2)).distinct().limit(size+1).toList();
+        List<UserDto> users = generateDefaultUsers(size+1, faker);
+        IntStream.range(0, size).mapToObj(index -> ForumCategoryEntity.builder()
                 .created(LocalDateTime.now().minusDays(new Random().nextInt(0, 3)))
                 .categoryName(categoryNames.get(index))
                 .description(faker.lorem().sentence())
