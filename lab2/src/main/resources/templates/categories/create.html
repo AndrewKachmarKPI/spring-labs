@@ -41,9 +41,9 @@
                 <div class="mb-3">
                     <label for="moderator" class="form-label">Moderator</label>
                     <select class="form-select" id="moderator" th:field="*{username}">
-                        <option th:each="user :${users}"
-                                th:value="${user.username}"
-                                th:text="${user.username}"></option>
+                        <option th:each="userEntity :${users}"
+                                th:value="${userEntity.username}"
+                                th:text="${userEntity.username}"></option>
                     </select>
                     <small th:if="${#fields.hasErrors('username')}"
                            th:errors="*{username}"

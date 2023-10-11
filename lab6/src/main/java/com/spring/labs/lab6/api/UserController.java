@@ -1,7 +1,7 @@
-package com.spring.labs.lab5.api;
+package com.spring.labs.lab6.api;
 
-import com.spring.labs.lab5.domain.User;
-import com.spring.labs.lab5.service.UserService;
+import com.spring.labs.lab6.dto.UserDto;
+import com.spring.labs.lab6.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -21,13 +21,13 @@ public class UserController {
 
     @GetMapping
     @Operation(summary = "Get all users")
-    public ResponseEntity<List<User>> findAllUsers() {
+    public ResponseEntity<List<UserDto>> findAllUsers() {
         return ResponseEntity.ok(userService.findAll());
     }
 
     @GetMapping("/{username}")
     @Operation(summary = "Get user by username")
-    public ResponseEntity<User> findUserByName(@PathVariable
+    public ResponseEntity<UserDto> findUserByName(@PathVariable
                                                   @Parameter(description = "Username of the user", required = true)
                                                   @NotBlank String username) {
         return ResponseEntity.ok(userService.findUserByName(username));
