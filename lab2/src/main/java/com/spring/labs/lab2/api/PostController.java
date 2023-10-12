@@ -80,7 +80,7 @@ public class PostController {
 	}
 
 	@GetMapping({ "/post/{name}" })
-	public ModelAndView findAll(@PathVariable("name") String name) {
+	public ModelAndView findPost(@PathVariable("name") String name) {
 		ModelAndView modelAndView = new ModelAndView("posts/post");
 		modelAndView.addObject("post", postService.findByPostName(name));
 		modelAndView.addObject("name", name);
