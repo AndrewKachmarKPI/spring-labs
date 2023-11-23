@@ -19,6 +19,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
+import java.net.URI;
 
 @RestController
 @RequestMapping("/categories")
@@ -43,7 +46,12 @@ public class CategoryController {
     public ResponseEntity<ForumCategory> createForumCategory(
             @Valid @RequestBody CreateForumCategoryDto forumCategory) {
         ForumCategory createdCategory = categoryService.create(forumCategory);
-        return new ResponseEntity<>(createdCategory, HttpStatus.CREATED);
+        URI location = ServletUriComponentsBuilder
+                .fromCurrentRequest()
+                .path("/{id}")
+                .buildAndExpand(createdCategory.getId())
+                .toUri();
+        return ResponseEntity.created(location).body(createdCategory);
     }
 
     @Operation(summary = "Update an existing forum category by ID", description = "Update an existing forum category by its ID.")

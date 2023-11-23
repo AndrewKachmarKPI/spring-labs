@@ -5,7 +5,10 @@ import com.spring.labs.lab4.exceptions.ResourceNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor
@@ -13,7 +16,7 @@ public class FakeTopicDao implements TopicDao {
     private final List<Topic> topics = new ArrayList<>();
 
     @Override
-    public void save(Topic topic) {
+    public Topic save(Topic topic) {
         if (Optional.ofNullable(topic.getId()).isEmpty()) {
             topic = topic.toBuilder().id((long) topics.size() + 1).build();
         } else {
@@ -21,6 +24,7 @@ public class FakeTopicDao implements TopicDao {
             topics.remove(topic1);
         }
         topics.add(topic);
+        return topic;
     }
 
     @Override

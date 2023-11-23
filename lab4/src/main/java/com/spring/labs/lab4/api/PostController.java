@@ -1,9 +1,9 @@
 package com.spring.labs.lab4.api;
 
-import java.util.List;
-
-import com.spring.labs.lab4.domain.Topic;
+import com.spring.labs.lab4.domain.Post;
+import com.spring.labs.lab4.dto.CreatePostDto;
 import com.spring.labs.lab4.exceptions.ErrorResponse;
+import com.spring.labs.lab4.service.PostService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -11,18 +11,17 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import com.spring.labs.lab4.domain.Post;
-import com.spring.labs.lab4.dto.CreatePostDto;
-import com.spring.labs.lab4.service.PostService;
-
-import jakarta.validation.Valid;
+import java.net.URI;
+import java.util.List;
 
 @Controller
 @RequestMapping("/posts")
@@ -50,7 +49,12 @@ public class PostController {
             @PathVariable String topicTitle,
             @Valid @RequestBody CreatePostDto post) {
         Post createdPost = postService.createPost(post, topicTitle);
-        return new ResponseEntity<>(createdPost, HttpStatus.CREATED);
+        URI location = ServletUriComponentsBuilder
+                .fromCurrentRequest()
+                .path("/{id}")
+                .buildAndExpand(createdPost.getId())
+                .toUri();
+        return ResponseEntity.created(location).body(createdPost);
     }
 
     @Operation(summary = "Update post by ID", description = "Update an existing post by its Id.")
@@ -128,6 +132,20 @@ public class PostController {
             @Parameter(description = "Topic name", required = true)
             @PathVariable String topicName) {
         return new ResponseEntity<>(postService.findByTopicName(topicName), HttpStatus.OK);
+    }
+
+    @Operation(summary = "Find posts", description = "Find a list of all posts by topic name.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Post retrieved successfully",
+                    content = @Content(schema = @Schema(implementation = Post.class))),
+            @ApiResponse(responseCode = "400", description = "Bad request",
+                    content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+            @ApiResponse(responseCode = "500", description = "Internal server error",
+                    content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+    })
+    @GetMapping
+    public ResponseEntity<List<Post>> findAllPosts() {
+        return new ResponseEntity<>(postService.findAll(), HttpStatus.OK);
     }
 
 

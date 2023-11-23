@@ -1,27 +1,25 @@
 package com.spring.labs.lab4.serviceImpl;
 
 
+import com.spring.labs.lab4.dao.PostDao;
+import com.spring.labs.lab4.domain.Post;
+import com.spring.labs.lab4.domain.Topic;
+import com.spring.labs.lab4.domain.User;
+import com.spring.labs.lab4.dto.CreatePostDto;
+import com.spring.labs.lab4.exceptions.ResourceNotFoundException;
+import com.spring.labs.lab4.service.PostService;
+import com.spring.labs.lab4.service.TopicService;
+import com.spring.labs.lab4.service.UserService;
+import lombok.RequiredArgsConstructor;
+import net.datafaker.Faker;
+import org.springframework.stereotype.Service;
+
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
-
-import com.spring.labs.lab4.exceptions.ResourceNotFoundException;
-import com.spring.labs.lab4.service.PostService;
-import com.spring.labs.lab4.service.TopicService;
-import com.spring.labs.lab4.service.UserService;
-import org.springframework.stereotype.Service;
-
-import com.spring.labs.lab4.dao.PostDao;
-import com.spring.labs.lab4.domain.Post;
-import com.spring.labs.lab4.domain.Topic;
-import com.spring.labs.lab4.domain.User;
-import com.spring.labs.lab4.dto.CreatePostDto;
-
-import lombok.RequiredArgsConstructor;
-import net.datafaker.Faker;
 
 @Service
 @RequiredArgsConstructor
@@ -93,9 +91,13 @@ public class PostServiceImpl implements PostService {
                 .name(postDto.getName())
                 .author(userService.findUserByName(postDto.getAuthor()))
                 .creationDate(LocalDateTime.now())
-                .topic((Topic) topicService.findByName(topicTitle))
+                .topic(topicService.findByName(topicTitle))
                 .build();
-        dao.save(post);
-        return post;
+        return dao.save(post);
+    }
+
+    @Override
+    public List<Post> findAll() {
+        return dao.findAll();
     }
 }

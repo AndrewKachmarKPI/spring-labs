@@ -1,34 +1,33 @@
 package com.spring.labs.lab4.dao;
 
 
-import java.util.*;
-
+import com.spring.labs.lab4.domain.Post;
 import com.spring.labs.lab4.exceptions.ResourceNotFoundException;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
-import com.spring.labs.lab4.domain.Post;
-
-import lombok.RequiredArgsConstructor;
+import java.util.*;
 
 @Repository
 @RequiredArgsConstructor
 public class FakePostDao implements PostDao {
 
-    private static int generalId=1;
+    private static int generalId = 1;
     private final Map<String, Post> posts = new HashMap<>();
 
 
     @Override
     public Post save(Post post) {
         if (Optional.ofNullable(post.getId()).isEmpty()) {
-            post = post.toBuilder().id((long) generalId ++).build();
+            post = post.toBuilder().id((long) generalId++).build();
         } else {
             Post finalPost = post;
             Post postById = findById(post.getId())
                     .orElseThrow(() -> new ResourceNotFoundException("Post with " + finalPost.getId() + " id is not found"));
             posts.remove(postById.getName());
         }
-        return posts.put(post.getName(), post);
+        posts.put(post.getName(), post);
+        return post;
     }
 
     @Override
@@ -39,7 +38,7 @@ public class FakePostDao implements PostDao {
     @Override
     public Optional<Post> findById(Long id) {
         return Optional.ofNullable(posts.values().stream().filter(post -> post.getId().equals(id)).findAny()
-                .orElseThrow(() -> new RuntimeException("Post with id:" + id + " is not found")));
+                .orElseThrow(() -> new ResourceNotFoundException("Post with id:" + id + " is not found")));
     }
 
     @Override
@@ -53,7 +52,7 @@ public class FakePostDao implements PostDao {
     @Override
     public void deleteByName(String postName) {
         if (!existByName(postName)) {
-            throw new RuntimeException("Post with " + postName + " name  is not found");
+            throw new ResourceNotFoundException("Post with " + postName + " name  is not found");
         }
         posts.remove(postName);
     }

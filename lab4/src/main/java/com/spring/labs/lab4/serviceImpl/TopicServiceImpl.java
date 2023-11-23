@@ -12,7 +12,6 @@ import com.spring.labs.lab4.service.TopicService;
 import com.spring.labs.lab4.service.UserService;
 import lombok.RequiredArgsConstructor;
 import net.datafaker.Faker;
-
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -40,8 +39,7 @@ public class TopicServiceImpl implements TopicService {
                 .creationDate(LocalDateTime.now())
                 .forumCategory(categoryService.findByName(categoryName))
                 .build();
-        topicDao.save(topic);
-        return topic;
+        return topicDao.save(topic);
     }
 
 
@@ -51,7 +49,7 @@ public class TopicServiceImpl implements TopicService {
                 .filter(topic -> topic.getForumCategory().getCategoryName().equals(categoryName))
                 .toList();
     }
-    
+
     @Override
     public Topic findById(Long id) {
         return topicDao.findById(id);
@@ -74,6 +72,9 @@ public class TopicServiceImpl implements TopicService {
 
     @Override
     public void deleteTopic(String title) {
+        if (!topicDao.existByTitle(title)) {
+            throw new ResourceNotFoundException("Topic with name " + title + " is not found");
+        }
         topicDao.deleteTopic(title);
     }
 

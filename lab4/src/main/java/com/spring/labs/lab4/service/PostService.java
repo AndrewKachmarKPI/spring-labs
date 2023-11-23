@@ -1,10 +1,10 @@
 package com.spring.labs.lab4.service;
 
-import java.util.List;
-
 import com.spring.labs.lab4.domain.Post;
 import com.spring.labs.lab4.dto.CreatePostDto;
 import net.datafaker.Faker;
+
+import java.util.List;
 
 public interface PostService {
 
@@ -21,4 +21,5 @@ public interface PostService {
     Post findByPostName(String name);
 
     Post createPost(CreatePostDto post, String topicTitle);
+    List<Post> findAll();
 }

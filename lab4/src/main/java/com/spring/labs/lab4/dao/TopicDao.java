@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface TopicDao {
-    void save(Topic topic);
+    Topic save(Topic topic);
     List<Topic> findAll();
     Topic findById(Long id);
     void deleteTopic(String title);

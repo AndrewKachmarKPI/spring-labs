@@ -25,7 +25,8 @@ public class FakeForumCategoryDao implements ForumCategoryDao {
                     .orElseThrow(() -> new ResourceNotFoundException("Category is with " + finalForumCategory.getId() + " is not found"));
             categories.remove(category.getCategoryName());
         }
-        return categories.put(forumCategory.getCategoryName(), forumCategory);
+        categories.put(forumCategory.getCategoryName(), forumCategory);
+        return forumCategory;
     }
 
     @Override
