@@ -1,6 +1,8 @@
 package com.spring.labs.lab4;
 
 import com.spring.labs.lab4.service.ForumCategoryService;
+import com.spring.labs.lab4.service.PostService;
+import com.spring.labs.lab4.service.TopicService;
 import com.spring.labs.lab4.service.UserService;
 import net.datafaker.Faker;
 import org.springframework.boot.CommandLineRunner;
@@ -17,10 +19,12 @@ public class Lab4Application {
     }
 
     @Bean
-    CommandLineRunner runner(UserService userService, ForumCategoryService forumCategoryService) {
+    CommandLineRunner runner(UserService userService, ForumCategoryService forumCategoryService, TopicService topicService, PostService postService) {
         return args -> {
             userService.generateDefaultUsers(100, dataFaker());
             forumCategoryService.generateDefaultCategories(15, dataFaker());
+            topicService.generateDefaultTopics(30, dataFaker());
+            postService.generateDefaultPosts(100,dataFaker());
         };
     }
 
@@ -29,5 +33,4 @@ public class Lab4Application {
     Faker dataFaker() {
         return new Faker();
     }
-
 }
