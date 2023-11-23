@@ -106,7 +106,7 @@ public class PostController {
             @ApiResponse(responseCode = "500", description = "Internal server error",
                     content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
     })
-    @GetMapping("/post/{id}")
+    @GetMapping("/post/id/{id}")
     public ResponseEntity<Post> findPostById(
             @Parameter(description = "Post id to retrieve", required = true)
             @PathVariable Long id) {
