@@ -1,5 +1,6 @@
 package com.spring.labs.lab4.service;
 
+import com.spring.labs.lab4.domain.ForumCategory;
 import com.spring.labs.lab4.domain.Topic;
 import com.spring.labs.lab4.dto.CreateTopicDto;
 import net.datafaker.Faker;
@@ -20,4 +21,6 @@ public interface TopicService {
 	void generateDefaultTopics(Integer size, Faker faker);
 
 	Topic findByName(String title);
+
+	List<Topic> findAll();
 }

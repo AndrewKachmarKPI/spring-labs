@@ -96,4 +96,9 @@ public class TopicServiceImpl implements TopicService {
         return topicDao.findByName(title)
                 .orElseThrow(() -> new ResourceNotFoundException("Topic with title:" + title + " is not found"));
     }
+
+    @Override
+    public List<Topic> findAll() {
+        return topicDao.findAll();
+    }
 }
