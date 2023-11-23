@@ -13,6 +13,7 @@ public interface ForumCategoryService {
     ForumCategory update(Long categoryId, CreateForumCategoryDto forumCategory);
 
     PageDto<ForumCategory> findAll(Integer pageNumber, Integer pageSize, String title);
+    List<ForumCategory> findAll();
 
     void deleteByName(String categoryName);
 

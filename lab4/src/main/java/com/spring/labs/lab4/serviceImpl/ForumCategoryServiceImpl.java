@@ -74,6 +74,11 @@ public class ForumCategoryServiceImpl implements ForumCategoryService {
     }
 
     @Override
+    public List<ForumCategory> findAll() {
+        return dao.findAll();
+    }
+
+    @Override
     public void deleteByName(String categoryName) {
         dao.removeByName(categoryName);
     }
