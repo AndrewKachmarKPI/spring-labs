@@ -22,3 +22,16 @@ CREATE TABLE IF NOT EXISTS forum_category
     moderator_id     INT,
     FOREIGN KEY (moderator_id) REFERENCES users (id)
 );
+
+-- Create the Topic table
+CREATE TABLE IF NOT EXISTS topics
+(
+    id            INT AUTO_INCREMENT PRIMARY KEY,
+    title         VARCHAR(255) NOT NULL,
+    content       TEXT,
+    author_id     INT,
+    creation_date VARCHAR(255),
+    category_id   INT,
+    FOREIGN KEY (author_id) REFERENCES users (id),
+    FOREIGN KEY (category_id) REFERENCES forum_category (id)
+);

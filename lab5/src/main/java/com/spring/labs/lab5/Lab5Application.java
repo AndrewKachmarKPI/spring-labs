@@ -1,6 +1,7 @@
 package com.spring.labs.lab5;
 
 import com.spring.labs.lab5.service.ForumCategoryService;
+import com.spring.labs.lab5.service.TopicService;
 import com.spring.labs.lab5.service.UserService;
 import net.datafaker.Faker;
 import org.springframework.boot.CommandLineRunner;
@@ -17,10 +18,11 @@ public class Lab5Application {
     }
 
     @Bean
-    CommandLineRunner runner(UserService userService, ForumCategoryService forumCategoryService) {
+    CommandLineRunner runner(UserService userService, ForumCategoryService forumCategoryService, TopicService topicService) {
         return args -> {
             userService.generateDefaultUsers(100, dataFaker());
             forumCategoryService.generateDefaultCategories(15, dataFaker());
+            topicService.generateDefaultTopics(30, dataFaker());
         };
     }
 
