@@ -78,6 +78,7 @@ public class ForumCategoryServiceImpl implements ForumCategoryService {
     }
 
     @Override
+    @Transactional
     public void deleteByName(String categoryName) {
         if (!forumCategoryRepository.existsByCategoryName(categoryName)) {
             throw new ResourceAlreadyExistsException("Category with name " + categoryName + " is not found");
@@ -101,7 +102,7 @@ public class ForumCategoryServiceImpl implements ForumCategoryService {
 
 
     public ForumCategoryEntity findEntityById(Long id) {
-        return forumCategoryRepository.findById(id)
+        return forumCategoryRepository.findCategoryById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Category with id:" + id + " is not found"));
     }
 }

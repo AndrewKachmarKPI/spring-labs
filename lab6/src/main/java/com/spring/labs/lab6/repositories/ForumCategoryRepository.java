@@ -25,4 +25,6 @@ public interface ForumCategoryRepository extends CrudRepository<ForumCategoryEnt
     List<ForumCategoryEntity> findAll();
 
     void deleteByCategoryName(String categoryName);
+
+    Optional<ForumCategoryEntity> findCategoryById(Long id);
 }

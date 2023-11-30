@@ -1,16 +1,16 @@
 package com.spring.labs.lab6.serviceImpl;
 
 import com.spring.labs.lab6.domain.ForumCategoryEntity;
+import com.spring.labs.lab6.domain.TopicEntity;
 import com.spring.labs.lab6.domain.UserEntity;
 import com.spring.labs.lab6.dto.UserDto;
 import com.spring.labs.lab6.enums.UserRole;
 import com.spring.labs.lab6.exceptions.ResourceNotFoundException;
 import com.spring.labs.lab6.mapper.BusinessMapper;
 import com.spring.labs.lab6.repositories.ForumCategoryRepository;
+import com.spring.labs.lab6.repositories.TopicRepository;
 import com.spring.labs.lab6.repositories.UserRepository;
 import com.spring.labs.lab6.service.DefaultGenerateMethods;
-import com.spring.labs.lab6.service.ForumCategoryService;
-import com.spring.labs.lab6.service.UserService;
 import lombok.RequiredArgsConstructor;
 import net.datafaker.Faker;
 import org.springframework.stereotype.Service;
@@ -28,6 +28,7 @@ public class GenerateService implements DefaultGenerateMethods {
     private final BusinessMapper businessMapper;
     private final UserRepository userRepository;
     private final ForumCategoryRepository forumCategoryRepository;
+    private final TopicRepository topicRepository;
 
 
     @Override
@@ -57,6 +58,19 @@ public class GenerateService implements DefaultGenerateMethods {
                 .build()).collect(Collectors.toList());
     }
 
+    @Override
+    public void generateDefaultTopics(Integer size, Faker faker) {
+        List<String> topicTitles = Stream.generate(() -> faker.lorem().sentence(2)).distinct().limit(size + 1).toList();
+        List<UserDto> authors = generateDefaultUsers(size + 1, faker);
+        List<ForumCategoryEntity> categories = forumCategoryRepository.findAll();
+        IntStream.range(0, size).mapToObj(index -> TopicEntity.builder()
+                .creationDate(LocalDateTime.now().minusDays(new Random().nextInt(0, 3)))
+                .title(topicTitles.get(index))
+                .content(faker.lorem().sentence())
+                .author(businessMapper.getUserEntity(authors.get(index)))
+                .forumCategory(categories.get(new Random().nextInt(0, categories.size())))
+                .build()).forEach(topicRepository::save);
+    }
     private UserEntity findUserByName(String username) {
         return userRepository.findByUsername(username)
                 .orElseThrow(() -> new ResourceNotFoundException("User with name:" + username + " is not found"));

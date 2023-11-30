@@ -1,8 +1,10 @@
 package com.spring.labs.lab6.mapper;
 
 import com.spring.labs.lab6.domain.ForumCategoryEntity;
+import com.spring.labs.lab6.domain.TopicEntity;
 import com.spring.labs.lab6.domain.UserEntity;
 import com.spring.labs.lab6.dto.ForumCategoryDto;
+import com.spring.labs.lab6.dto.TopicDto;
 import com.spring.labs.lab6.dto.UserDto;
 import com.spring.labs.lab6.dto.create.CreateUserDto;
 import org.springframework.stereotype.Service;
@@ -16,6 +18,7 @@ import java.util.function.Function;
 public class BusinessMapper {
     public Function<ForumCategoryEntity, ForumCategoryDto> categoryEntityToDto = this::getForumCategory;
     public Function<UserEntity, UserDto> userEntityToDto = this::getUserDto;
+    public Function<TopicEntity, TopicDto> topicEntityToDto = this::getTopic;
 
 
     public <A, R> List<R> collectionToList(Collection<A> collection, Function<A, R> mapper) {
@@ -45,6 +48,16 @@ public class BusinessMapper {
                 .role(user.getRole())
                 .build();
     }
+    public TopicDto getTopic(TopicEntity topic) {
+        return TopicDto.builder()
+                .id(topic.getId())
+                .title(topic.getTitle())
+                .content(topic.getContent())
+                .author(getUserDto(topic.getAuthor()))
+                .creationDate(topic.getCreationDate())
+                .forumCategory(getForumCategory(topic.getForumCategory()))
+                .build();
+    }
 
     public UserEntity getUserEntity(UserDto createUserDto) {
         return UserEntity.builder()
@@ -57,7 +70,6 @@ public class BusinessMapper {
                 .role(createUserDto.getRole())
                 .build();
     }
-
     public UserEntity getUserEntity(CreateUserDto createUserDto) {
         return UserEntity.builder()
                 .username(createUserDto.getUsername())

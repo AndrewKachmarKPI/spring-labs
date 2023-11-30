@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Builder(toBuilder = true)
 @Entity
-@NamedQuery(name = "ForumCategoryEntity.deleteByCategoryName",query = "DELETE FROM ForumCategoryEntity u WHERE u.categoryName=?1")
+@NamedQuery(name = "ForumCategoryEntity.findCategoryById",query = "SELECT '*' FROM ForumCategoryEntity c WHERE c.id = ?1")
 public class ForumCategoryEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,6 +24,6 @@ public class ForumCategoryEntity {
     private String description;
     @Column
     private String backgroundImage;
-    @ManyToOne(cascade = {CascadeType.PERSIST})
+    @ManyToOne(cascade = {CascadeType.ALL})
     private UserEntity moderator;
 }

@@ -22,6 +22,7 @@ public class Lab6Application {
         return args -> {
             generateMethods.generateDefaultUsers(100, dataFaker());
             generateMethods.generateDefaultCategories(15, dataFaker());
+            generateMethods.generateDefaultTopics(30, dataFaker());
         };
     }
 
