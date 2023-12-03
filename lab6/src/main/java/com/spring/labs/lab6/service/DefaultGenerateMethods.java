@@ -11,4 +11,6 @@ public interface DefaultGenerateMethods {
     void generateDefaultCategories(Integer size, Faker faker);
     List<UserDto> generateDefaultUsers(Integer size, Faker faker);
     void generateDefaultTopics(Integer size, Faker faker);
+
+    void generateDefaultPosts(Integer size, Faker faker);
 }

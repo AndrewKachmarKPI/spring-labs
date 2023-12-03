@@ -1,9 +1,11 @@
 package com.spring.labs.lab6.mapper;
 
 import com.spring.labs.lab6.domain.ForumCategoryEntity;
+import com.spring.labs.lab6.domain.PostEntity;
 import com.spring.labs.lab6.domain.TopicEntity;
 import com.spring.labs.lab6.domain.UserEntity;
 import com.spring.labs.lab6.dto.ForumCategoryDto;
+import com.spring.labs.lab6.dto.PostDto;
 import com.spring.labs.lab6.dto.TopicDto;
 import com.spring.labs.lab6.dto.UserDto;
 import com.spring.labs.lab6.dto.create.CreateUserDto;
@@ -19,6 +21,8 @@ public class BusinessMapper {
     public Function<ForumCategoryEntity, ForumCategoryDto> categoryEntityToDto = this::getForumCategory;
     public Function<UserEntity, UserDto> userEntityToDto = this::getUserDto;
     public Function<TopicEntity, TopicDto> topicEntityToDto = this::getTopic;
+
+    public Function<PostEntity, PostDto> postEntityToDto = this::getPost;
 
 
     public <A, R> List<R> collectionToList(Collection<A> collection, Function<A, R> mapper) {
@@ -56,6 +60,20 @@ public class BusinessMapper {
                 .author(getUserDto(topic.getAuthor()))
                 .creationDate(topic.getCreationDate())
                 .forumCategory(getForumCategory(topic.getForumCategory()))
+                .build();
+    }
+
+    public PostDto getPost(PostEntity post) {
+        return PostDto.builder()
+                .id(post.getId())
+                .name(post.getName())
+                .description(post.getDescription())
+                .content(post.getContent())
+                .author(getUserDto(post.getAuthor()))
+                .creationDate(post.getCreationDate())
+                .topic(getTopic(post.getTopic()))
+                .upVotes(post.getUpVotes())
+                .downVotes(post.getDownVotes())
                 .build();
     }
 
