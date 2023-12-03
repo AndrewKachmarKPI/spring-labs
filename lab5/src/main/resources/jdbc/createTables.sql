@@ -35,3 +35,19 @@ CREATE TABLE IF NOT EXISTS topics
     FOREIGN KEY (author_id) REFERENCES users (id),
     FOREIGN KEY (category_id) REFERENCES forum_category (id)
 );
+
+-- Create the Post table
+CREATE TABLE IF NOT EXISTS posts
+(
+    id            INT AUTO_INCREMENT PRIMARY KEY,
+    name          VARCHAR(255),
+    content       TEXT,
+    description   VARCHAR(255),
+    creation_date VARCHAR(255),
+    up_votes      INT,
+    down_votes    INT,
+    author_id     INT,
+    topic_id      INT,
+    FOREIGN KEY (author_id) REFERENCES users (id),
+    FOREIGN KEY (topic_id) REFERENCES topics (id)
+    );
