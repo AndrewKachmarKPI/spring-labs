@@ -1,13 +1,8 @@
 package com.spring.labs.lab5.dao.jdbc;
 
 import com.spring.labs.lab5.dao.PostDao;
-import com.spring.labs.lab5.dao.jdbc.mappers.ForumCategoryRowMapper;
 import com.spring.labs.lab5.dao.jdbc.mappers.PostRowMapper;
-import com.spring.labs.lab5.dao.jdbc.mappers.TopicRowMapper;
-import com.spring.labs.lab5.domain.ForumCategory;
 import com.spring.labs.lab5.domain.Post;
-import com.spring.labs.lab5.domain.Topic;
-import com.spring.labs.lab5.domain.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -17,7 +12,6 @@ import org.springframework.stereotype.Repository;
 
 import java.sql.PreparedStatement;
 import java.sql.Statement;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -27,6 +21,11 @@ import java.util.Optional;
 public class JdbcPostDao implements PostDao {
 
     public static final String INSERT_POST_SQL = "INSERT INTO posts ( name, content, description,creation_date, up_votes,down_votes,author_id, topic_id) VALUES (?,?,?,?,?,?,?,?)";
+    public static final String SELECT_ALL_SQL = "SELECT * FROM posts";
+    public static final String SELECT_BY_POST_ID_SQL = "SELECT * FROM posts WHERE id = ?";
+    public static final String SELECT_BY_POST_NAME_SQL = "SELECT * FROM posts WHERE name = ?";
+    public static final String SELECT_COUNT_BY_NAME_SQL = "SELECT COUNT(*) FROM posts WHERE name = ?";
+    public static final String DELETE_BY_POST_NAME_SQL = "DELETE FROM posts WHERE name = ?";
 
     private final JdbcTemplate jdbcTemplate;
 
@@ -51,33 +50,29 @@ public class JdbcPostDao implements PostDao {
 
     @Override
     public List<Post> findAll() {
-        return jdbcTemplate.query("SELECT * FROM posts", new PostRowMapper(jdbcTemplate));
+        return jdbcTemplate.query(SELECT_ALL_SQL, new PostRowMapper(jdbcTemplate));
     }
 
     @Override
     public Optional<Post> findById(Long id) {
-        String selectSql = "SELECT * FROM posts WHERE id = ?";
-        List<Post> result = jdbcTemplate.query(selectSql, new Object[]{id}, new PostRowMapper(jdbcTemplate));
+        List<Post> result = jdbcTemplate.query(SELECT_BY_POST_ID_SQL, new Object[]{id}, new PostRowMapper(jdbcTemplate));
         return result.isEmpty() ? Optional.empty() : Optional.of(result.get(0));
     }
 
     @Override
     public Optional<Post> findByName(String name) {
-        String selectSql = "SELECT * FROM posts WHERE name = ?";
-        List<Post> result = jdbcTemplate.query(selectSql, new Object[]{name}, new PostRowMapper(jdbcTemplate));
+        List<Post> result = jdbcTemplate.query(SELECT_BY_POST_NAME_SQL, new Object[]{name}, new PostRowMapper(jdbcTemplate));
         return result.isEmpty() ? Optional.empty() : Optional.of(result.get(0));
     }
 
     @Override
     public boolean existByName(String postName) {
-        String countSql = "SELECT COUNT(*) FROM posts WHERE name = ?";
-        int count = jdbcTemplate.queryForObject(countSql, new Object[]{postName}, Integer.class);
+        int count = jdbcTemplate.queryForObject(SELECT_COUNT_BY_NAME_SQL, new Object[]{postName}, Integer.class);
         return count > 0;
     }
 
     @Override
     public void deleteByName(String postName) {
-        String deleteSql = "DELETE FROM posts WHERE name = ?";
-        jdbcTemplate.update(deleteSql, postName);
+        jdbcTemplate.update(DELETE_BY_POST_NAME_SQL, postName);
     }
 }

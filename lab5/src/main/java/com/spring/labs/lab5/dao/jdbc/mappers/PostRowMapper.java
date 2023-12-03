@@ -14,8 +14,8 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class PostRowMapper implements RowMapper<Post> {
 
-    private static final String SELECT_USER_BY_ID_SQL = "SELECT * FROM users WHERE id = ?";
-    private static final String SELECT_TOPIC_BY_ID_SQL = "SELECT * FROM topics WHERE id = ?";
+    public static final String SELECT_USER_BY_ID_SQL = "SELECT * FROM users WHERE id = ?";
+    public static final String SELECT_TOPIC_BY_ID_SQL = "SELECT * FROM topics WHERE id = ?";
 
     private JdbcTemplate jdbcTemplate;
 
