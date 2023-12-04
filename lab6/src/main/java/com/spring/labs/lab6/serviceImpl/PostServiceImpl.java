@@ -26,9 +26,6 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public PostDto update(CreatePostDto createPost, Long postId) {
-        if (postRepository.existsByName(createPost.getName())) {
-            throw new ResourceAlreadyExistsException("Post with name " + createPost.getName() + " already exists");
-        }
         PostEntity post = findEntityById(postId);
         post = post.toBuilder()
                 .name(createPost.getName())
