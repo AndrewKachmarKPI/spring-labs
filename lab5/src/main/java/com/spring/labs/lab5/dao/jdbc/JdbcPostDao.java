@@ -21,6 +21,8 @@ import java.util.Optional;
 public class JdbcPostDao implements PostDao {
 
     public static final String INSERT_POST_SQL = "INSERT INTO posts ( name, content, description,creation_date, up_votes,down_votes,author_id, topic_id) VALUES (?,?,?,?,?,?,?,?)";
+    public static final String UPDATE_POST_SQL =  "UPDATE posts SET name=?, content=?, description=?, creation_date=?, up_votes=?, down_votes=?, author_id=?, topic_id=? WHERE id=?";
+
     public static final String SELECT_ALL_SQL = "SELECT * FROM posts";
     public static final String SELECT_BY_POST_ID_SQL = "SELECT * FROM posts WHERE id = ?";
     public static final String SELECT_BY_POST_NAME_SQL = "SELECT * FROM posts WHERE name = ?";
@@ -29,8 +31,27 @@ public class JdbcPostDao implements PostDao {
 
     private final JdbcTemplate jdbcTemplate;
 
+    @Override
     public Post save(Post post) {
         KeyHolder keyHolder = new GeneratedKeyHolder();
+        if (findById(post.getId()).isPresent()) {
+            jdbcTemplate.update(
+                    con -> {
+                        PreparedStatement ps = con.prepareStatement(UPDATE_POST_SQL);
+                        ps.setString(1, post.getName());
+                        ps.setString(2, post.getContent());
+                        ps.setString(3, post.getDescription());
+                        ps.setString(4, String.valueOf(post.getCreationDate()));
+                        ps.setInt(5, post.getUpVotes());
+                        ps.setInt(6, post.getDownVotes());
+                        ps.setLong(7, post.getAuthor().getId());
+                        ps.setLong(8, post.getTopic().getId());
+                        ps.setLong(9, post.getId());
+                        return ps;
+                    });
+            return post;
+        }
+        else {
         jdbcTemplate.update(
                 con -> {
                     PreparedStatement ps = con.prepareStatement(INSERT_POST_SQL, Statement.RETURN_GENERATED_KEYS);
@@ -44,9 +65,11 @@ public class JdbcPostDao implements PostDao {
                     ps.setLong(8, post.getTopic().getId());
                     return ps;
                 }, keyHolder);
-        return post.toBuilder()
-                .id(keyHolder.getKey().longValue()).build();
+            return post.toBuilder()
+                    .id(keyHolder.getKey().longValue()).build();
+        }
     }
+
 
     @Override
     public List<Post> findAll() {

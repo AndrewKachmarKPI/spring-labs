@@ -9,6 +9,7 @@ import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 import com.spring.labs.lab5.dao.PostDao;
+import com.spring.labs.lab5.exceptions.ResourceAlreadyExistsException;
 import com.spring.labs.lab5.exceptions.ResourceNotFoundException;
 import com.spring.labs.lab5.service.PostService;
 import com.spring.labs.lab5.service.TopicService;
@@ -37,14 +38,28 @@ public class PostServiceImpl implements PostService {
         this.topicService = topicService;
     }
 
+
     @Override
-    public Post update(CreatePostDto createPost, Long postId) {
+    public Post createPost(CreatePostDto postDto, String topicTitle) {
+        Post post = Post.builder()
+                .content(postDto.getContent())
+                .description(postDto.getDescription())
+                .name(postDto.getName())
+                .author(userService.findUserByName(postDto.getAuthor()))
+                .creationDate(LocalDateTime.now())
+                .topic(topicService.findByName(topicTitle))
+                .build();
+        return postDao.save(post);
+    }
+
+    @Override
+    public Post update(CreatePostDto createPostDto, Long postId) {
         Post post = findById(postId);
         post = post.toBuilder()
-                .name(createPost.getName())
-                .author(userService.findUserByName(createPost.getAuthor()))
-                .description(createPost.getDescription())
-                .content(createPost.getContent())
+                .name(createPostDto.getName())
+                .author(userService.findUserByName(createPostDto.getAuthor()))
+                .description(createPostDto.getDescription())
+                .content(createPostDto.getContent())
                 .build();
         return postDao.save(post);
     }
@@ -91,19 +106,6 @@ public class PostServiceImpl implements PostService {
         return postDao.findByName(postName).orElseThrow(() -> new ResourceNotFoundException("Post with name:" + postName + " is not found"));
     }
 
-    @Override
-    public Post createPost(CreatePostDto postDto, String topicTitle) {
-        Post post = Post.builder()
-                .content(postDto.getContent())
-                .description(postDto.getDescription())
-                .name(postDto.getName())
-                .author(userService.findUserByName(postDto.getAuthor()))
-                .creationDate(LocalDateTime.now())
-                .topic((Topic) topicService.findByName(topicTitle))
-                .build();
-        postDao.save(post);
-        return post;
-    }
 
     @Override
     public List<Post> findAll() {
