@@ -30,7 +30,7 @@ public class PostEntity {
     private int downVotes;
     @Column(nullable = false)
     private LocalDateTime creationDate;
-    @ManyToOne(cascade = {CascadeType.PERSIST})
+    @ManyToOne(cascade = {CascadeType.ALL})
     private UserEntity author;
     @ManyToOne
     private TopicEntity topic;

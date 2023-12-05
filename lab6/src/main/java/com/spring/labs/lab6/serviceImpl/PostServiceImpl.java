@@ -26,6 +26,9 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public PostDto update(CreatePostDto createPost, Long postId) {
+        if (postRepository.existsByName(createPost.getName())) {
+            throw new ResourceAlreadyExistsException("Post with name " + createPost.getName() + " already exists");
+        }
         PostEntity post = findEntityById(postId);
         post = post.toBuilder()
                 .name(createPost.getName())
@@ -67,6 +70,9 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public PostDto createPost(CreatePostDto postDto, String topicTitle) {
+        if (postRepository.existsByName(postDto.getName())) {
+            throw new ResourceAlreadyExistsException("Post with name " + postDto.getName() + " already exists");
+        }
         PostEntity post = PostEntity.builder()
                 .content(postDto.getContent())
                 .description(postDto.getDescription())
