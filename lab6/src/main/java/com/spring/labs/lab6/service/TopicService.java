@@ -2,11 +2,12 @@ package com.spring.labs.lab6.service;
 
 import com.spring.labs.lab6.dto.TopicDto;
 import com.spring.labs.lab6.dto.create.CreateTopicDto;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 public interface TopicService {
-    TopicDto create(CreateTopicDto topicDto, String categoryName);
+    TopicDto create(CreateTopicDto createTopic, String categoryName, String userName);
 
     TopicDto updateTopic(CreateTopicDto topicDto, Long id);
 

@@ -42,12 +42,13 @@ public class TopicController {
             @ApiResponse(responseCode = "500", description = "Internal server error",
                     content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
     })
-    @PostMapping("/{categoryName}")
+    @PostMapping("/{categoryName}/{userName}")
     public ResponseEntity<TopicDto> createTopic(
             @Parameter(description = "Forum category name", required = true)
             @PathVariable @NotBlank String categoryName,
+            @PathVariable @NotBlank String userName,
             @Valid @RequestBody CreateTopicDto topic) {
-        return new ResponseEntity<>(topicService.create(topic, categoryName), HttpStatus.CREATED);
+        return new ResponseEntity<>(topicService.create(topic, categoryName, userName), HttpStatus.CREATED);
     }
 
     @Operation(summary = "Update an existing topic by ID", description = "Update an existing topic by its ID.")

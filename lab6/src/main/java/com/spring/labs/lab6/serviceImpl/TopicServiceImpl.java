@@ -8,6 +8,7 @@ import com.spring.labs.lab6.exceptions.ResourceNotFoundException;
 import com.spring.labs.lab6.mapper.BusinessMapper;
 import com.spring.labs.lab6.repositories.ForumCategoryRepository;
 import com.spring.labs.lab6.repositories.TopicRepository;
+import com.spring.labs.lab6.repositories.UserRepository;
 import com.spring.labs.lab6.service.TopicService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -21,18 +22,19 @@ import java.util.List;
 public class TopicServiceImpl implements TopicService {
     private final ForumCategoryRepository categoryRepository;
     private final TopicRepository topicRepository;
+    private final UserRepository userRepository;
     private final BusinessMapper businessMapper;
-
     @Override
     @Transactional
-    public TopicDto create(CreateTopicDto createTopic, String categoryName) {
+    public TopicDto create(CreateTopicDto createTopic, String categoryName, String userName) {
         if (topicRepository.existsByTitle(createTopic.getTitle())) {
             throw new ResourceAlreadyExistsException("Topic with title " + createTopic.getTitle() + " already exists");
         }
         TopicEntity topic = TopicEntity.builder()
                 .title(createTopic.getTitle())
                 .content(createTopic.getContent())
-                .author(businessMapper.getUserEntity(createTopic.getCreateUserDto()))
+                .author(userRepository.findByUsername(userName)
+                        .orElseThrow(() -> new ResourceNotFoundException("User with name:" + userName + " is not found")))
                 .creationDate(LocalDateTime.now())
                 .forumCategory(categoryRepository.findByName(categoryName)
                         .orElseThrow(() -> new ResourceNotFoundException("Category with name:" + categoryName + " is not found")))

@@ -23,17 +23,4 @@ public class CreateTopicDto {
     @Size(min = 10, max = 500)
     @Pattern(regexp = "^[a-zA-Z0-9.\\n\\s]+$")
     private String content;
-    @NotNull
-    @NotBlank
-    @Pattern(regexp = "^[a-zA-Z0-9.]+$")
-    private String username;
-    @NotNull
-    private CreateUserDto createUserDto;
-    @NotNull
-    @NotBlank
-    @Size(min = 3, max = 50)
-    @Pattern(regexp = "^[a-zA-Z0-9. ]+$")
-    private String categoryName;
-    @NotNull
-    private CreateForumCategoryDto createForumCategoryDto;
 }
