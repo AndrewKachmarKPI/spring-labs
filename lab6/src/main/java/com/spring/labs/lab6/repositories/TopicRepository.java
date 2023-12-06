@@ -22,5 +22,5 @@ public interface TopicRepository extends CrudRepository<TopicEntity, Long> {
 
     void deleteByTitle(String title);
 
-    Optional<TopicEntity> findByTopicId(Long id);
+    Optional<TopicEntity> findById(Long id);
 }

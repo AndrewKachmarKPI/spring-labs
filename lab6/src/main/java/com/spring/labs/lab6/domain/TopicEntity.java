@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Builder(toBuilder = true)
 @Entity
-@NamedQuery(name = "TopicEntity.findByTopicId", query = "select '*' from TopicEntity t where t.id=?1")
+@NamedQuery(name = "TopicEntity.findById", query = "select '*' from TopicEntity t where t.id=?1")
 public class TopicEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

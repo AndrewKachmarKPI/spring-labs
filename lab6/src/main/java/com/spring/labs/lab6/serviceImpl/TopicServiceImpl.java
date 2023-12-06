@@ -89,7 +89,7 @@ public class TopicServiceImpl implements TopicService {
     }
 
     public TopicEntity findEntityById(Long id) {
-        return topicRepository.findByTopicId(id)
+        return topicRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Topic with id:" + id + " is not found"));
     }
 }
