@@ -30,14 +30,11 @@ public class CreatePostDto {
     @Size(min = 10, max = 100)
     @Pattern(regexp = "^[a-zA-Z0-9.\\n\\s]+$")
     private String description;
-    @NotNull
-    private CreateUserDto createUserDto;
-    @NotNull
-    @NotBlank
+
     @Size(min = 3, max = 50)
     @Pattern(regexp = "^[a-zA-Z0-9. ]+$")
     private String topicTitle;
     @NotNull
-    private CreateForumCategoryDto createForumCategoryDto;
-
+    @NotBlank
+    private String author;
 }

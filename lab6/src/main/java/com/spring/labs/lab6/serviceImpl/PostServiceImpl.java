@@ -8,6 +8,7 @@ import com.spring.labs.lab6.exceptions.ResourceNotFoundException;
 import com.spring.labs.lab6.mapper.BusinessMapper;
 import com.spring.labs.lab6.repositories.PostRepository;
 import com.spring.labs.lab6.repositories.TopicRepository;
+import com.spring.labs.lab6.repositories.UserRepository;
 import com.spring.labs.lab6.service.PostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -22,7 +23,9 @@ public class PostServiceImpl implements PostService {
 
     private final PostRepository postRepository;
     private final TopicRepository topicRepository;
+    private final UserRepository userRepository;
     private final BusinessMapper businessMapper;
+
 
     @Override
     public PostDto update(CreatePostDto createPost, Long postId) {
@@ -32,12 +35,12 @@ public class PostServiceImpl implements PostService {
         PostEntity post = findEntityById(postId);
         post = post.toBuilder()
                 .name(createPost.getName())
-                .content(post.getContent())
-                .topic(post.getTopic())
-                .author(post.getAuthor())
+                .content(createPost.getContent())
+                .topic(topicRepository.findByName(createPost.getTopicTitle()).get())
+                .author(userRepository.findByUsername(createPost.getAuthor()).get())
                 .upVotes(post.getUpVotes())
                 .downVotes(post.getDownVotes())
-                .description(post.getDescription())
+                .description(createPost.getDescription())
                 .build();
         return businessMapper.getPost(postRepository.save(post));
     }
@@ -77,7 +80,7 @@ public class PostServiceImpl implements PostService {
                 .content(postDto.getContent())
                 .description(postDto.getDescription())
                 .name(postDto.getName())
-                .author(businessMapper.getUserEntity(postDto.getCreateUserDto()))
+                .author(userRepository.findByUsername(postDto.getAuthor()).get())
                 .creationDate(LocalDateTime.now())
                 .topic(topicRepository.findByName(topicTitle)
                         .orElseThrow(() -> new ResourceNotFoundException("Topic with name:" + topicTitle + " is not found")))
