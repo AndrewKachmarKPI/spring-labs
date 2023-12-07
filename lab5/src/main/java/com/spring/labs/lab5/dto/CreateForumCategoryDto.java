@@ -1,6 +1,5 @@
 package com.spring.labs.lab5.dto;
 
-import com.spring.labs.lab5.domain.User;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
@@ -28,6 +27,5 @@ public class CreateForumCategoryDto {
     @NotBlank
     @Pattern(regexp = "^[a-zA-Z0-9.]+$")
     private String username;
-    @NotNull
     private CreateUserDto createUserDto;
 }

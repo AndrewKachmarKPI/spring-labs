@@ -20,7 +20,7 @@ public class SpringJdbcConfig {
         dataSource.setDriverClassName("com.mysql.cj.jdbc.Driver");
         dataSource.setUrl("jdbc:mysql://localhost:3306/spring_lab_5");
         dataSource.setUsername("root");
-        dataSource.setPassword("mysql2004");
+        dataSource.setPassword("root");
         return dataSource;
     }
 

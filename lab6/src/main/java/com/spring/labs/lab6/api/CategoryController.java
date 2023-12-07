@@ -2,8 +2,8 @@ package com.spring.labs.lab6.api;
 
 import com.spring.labs.lab6.domain.ForumCategoryEntity;
 import com.spring.labs.lab6.dto.ForumCategoryDto;
-import com.spring.labs.lab6.dto.create.CreateForumCategoryDto;
 import com.spring.labs.lab6.dto.PageDto;
+import com.spring.labs.lab6.dto.create.CreateForumCategoryDto;
 import com.spring.labs.lab6.exceptions.ErrorResponse;
 import com.spring.labs.lab6.service.ForumCategoryService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -95,8 +95,8 @@ public class CategoryController {
     @GetMapping("/filtered")
     public ResponseEntity<PageDto<ForumCategoryDto>> getAllForumCategoriesWithFilters(@RequestParam @Min(0) Integer pageNumber,
                                                                                       @RequestParam @Min(1) Integer pageSize,
-                                                                                      @RequestParam String username) {
-        return new ResponseEntity<>(categoryService.findAll(username, pageNumber, pageSize), HttpStatus.OK);
+                                                                                      @RequestParam String title) {
+        return new ResponseEntity<>(categoryService.findAll(title, pageNumber, pageSize), HttpStatus.OK);
     }
 
     @Operation(summary = "Delete a forum category by name", description = "Delete a forum category by its name.")

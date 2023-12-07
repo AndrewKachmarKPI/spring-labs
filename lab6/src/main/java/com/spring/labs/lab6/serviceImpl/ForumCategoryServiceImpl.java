@@ -1,9 +1,10 @@
 package com.spring.labs.lab6.serviceImpl;
 
 import com.spring.labs.lab6.domain.ForumCategoryEntity;
+import com.spring.labs.lab6.domain.UserEntity;
 import com.spring.labs.lab6.dto.ForumCategoryDto;
-import com.spring.labs.lab6.dto.create.CreateForumCategoryDto;
 import com.spring.labs.lab6.dto.PageDto;
+import com.spring.labs.lab6.dto.create.CreateForumCategoryDto;
 import com.spring.labs.lab6.exceptions.ResourceAlreadyExistsException;
 import com.spring.labs.lab6.exceptions.ResourceNotFoundException;
 import com.spring.labs.lab6.mapper.BusinessMapper;
@@ -19,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.Random;
 
 @Service
@@ -36,12 +38,15 @@ public class ForumCategoryServiceImpl implements ForumCategoryService {
         if (forumCategoryRepository.existsByCategoryName(createForumCategory.getCategoryName())) {
             throw new ResourceAlreadyExistsException("Category with name " + createForumCategory.getCategoryName() + " already exists");
         }
+        UserEntity user = Optional.ofNullable(createForumCategory.getCreateUserDto()).isPresent()
+                ? businessMapper.getUserEntity(createForumCategory.getCreateUserDto())
+                : userService.findUser(createForumCategory.getUsername());
         ForumCategoryEntity forumCategoryEntity = ForumCategoryEntity.builder()
                 .description(createForumCategory.getDescription())
                 .categoryName(createForumCategory.getCategoryName())
                 .backgroundImage(faker.internet().image(640, 200, new Random().toString()))
                 .created(LocalDateTime.now())
-                .moderator(businessMapper.getUserEntity(createForumCategory.getCreateUserDto()))
+                .moderator(user)
                 .build();
         return businessMapper.getForumCategory(forumCategoryRepository.save(forumCategoryEntity));
     }
@@ -57,11 +62,8 @@ public class ForumCategoryServiceImpl implements ForumCategoryService {
     }
 
     @Override
-    public PageDto<ForumCategoryDto> findAll(String moderatorUsername, Integer pageNumber, Integer pageSize) {
-        if (!userService.existByName(moderatorUsername)) {
-            throw new ResourceNotFoundException("User with username:" + moderatorUsername + " is not found");
-        }
-        Page<ForumCategoryEntity> categoriesPage = forumCategoryRepository.findAllByModeratorUsername(moderatorUsername, PageRequest.of(pageNumber, pageSize));
+    public PageDto<ForumCategoryDto> findAll(String categoryName, Integer pageNumber, Integer pageSize) {
+        Page<ForumCategoryEntity> categoriesPage = forumCategoryRepository.findAllByCategoryNameContaining(categoryName, PageRequest.of(pageNumber, pageSize));
         List<ForumCategoryDto> categoryDtos = businessMapper.collectionToList(categoriesPage.getContent(), businessMapper.categoryEntityToDto);
         return PageDto.<ForumCategoryDto>builder()
                 .data(categoryDtos)
@@ -102,7 +104,7 @@ public class ForumCategoryServiceImpl implements ForumCategoryService {
 
 
     public ForumCategoryEntity findEntityById(Long id) {
-        return forumCategoryRepository.findCategoryById(id)
+        return forumCategoryRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Category with id:" + id + " is not found"));
     }
 }

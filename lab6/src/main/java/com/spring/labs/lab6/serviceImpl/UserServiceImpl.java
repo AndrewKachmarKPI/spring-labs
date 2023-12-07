@@ -3,7 +3,6 @@ package com.spring.labs.lab6.serviceImpl;
 import com.spring.labs.lab6.domain.UserEntity;
 import com.spring.labs.lab6.dto.UserDto;
 import com.spring.labs.lab6.dto.create.CreateUserDto;
-import com.spring.labs.lab6.enums.UserRole;
 import com.spring.labs.lab6.exceptions.ResourceAlreadyExistsException;
 import com.spring.labs.lab6.exceptions.ResourceNotFoundException;
 import com.spring.labs.lab6.mapper.BusinessMapper;
@@ -23,9 +22,13 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto findUserByName(String username) {
-        UserEntity user = userRepository.findByUsername(username)
+        return businessMapper.getUserDto(findUser(username));
+    }
+
+    @Override
+    public UserEntity findUser(String username) {
+        return userRepository.findByUsername(username)
                 .orElseThrow(() -> new ResourceNotFoundException("User with name:" + username + " is not found"));
-        return businessMapper.getUserDto(user);
     }
 
     @Override

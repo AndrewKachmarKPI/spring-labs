@@ -3,7 +3,6 @@ package com.spring.labs.lab6.repositories;
 import com.spring.labs.lab6.domain.ForumCategoryEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.PagingAndSortingRepository;
@@ -20,7 +19,7 @@ public interface ForumCategoryRepository extends CrudRepository<ForumCategoryEnt
     @Query(value = "SELECT * FROM forum_category_entity WHERE category_name = :categoryName", nativeQuery = true)
     Optional<ForumCategoryEntity> findByName(@Param("categoryName") String categoryName);
 
-    Page<ForumCategoryEntity> findAllByModeratorUsername(String username, Pageable pageable);
+    Page<ForumCategoryEntity> findAllByCategoryNameContaining(String categoryName, Pageable pageable);
 
     List<ForumCategoryEntity> findAll();
 

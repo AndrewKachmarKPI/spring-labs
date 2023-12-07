@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.Random;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
@@ -41,10 +42,13 @@ public class ForumCategoryServiceImpl implements ForumCategoryService {
         if (dao.existByName(createForumCategory.getCategoryName())) {
             throw new ResourceAlreadyExistsException("Category with name " + createForumCategory.getCategoryName() + " already exists");
         }
+        User user = Optional.ofNullable(createForumCategory.getCreateUserDto()).isPresent()
+                ? userService.saveUser(createForumCategory.getCreateUserDto())
+                : userService.findUserByName(createForumCategory.getUsername());
         ForumCategory forumCategory = ForumCategory.builder()
                 .description(createForumCategory.getDescription())
                 .categoryName(createForumCategory.getCategoryName())
-                .moderator(userService.saveUser(createForumCategory.getCreateUserDto()))
+                .moderator(user)
                 .backgroundImage(faker.internet().image(640, 200, new Random().toString()))
                 .created(LocalDateTime.now().toString())
                 .build();
@@ -101,7 +105,7 @@ public class ForumCategoryServiceImpl implements ForumCategoryService {
     @Override
     public ForumCategory findById(Long id) {
         return dao.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Category with id:" + id + " is not found"));
+                .orElseThrow(() -> new RuntimeException("Category with id:" + id + " is not found"));
     }
 
     @Override

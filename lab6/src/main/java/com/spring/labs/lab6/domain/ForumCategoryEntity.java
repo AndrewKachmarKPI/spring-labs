@@ -24,6 +24,6 @@ public class ForumCategoryEntity {
     private String description;
     @Column
     private String backgroundImage;
-    @ManyToOne(cascade = {CascadeType.ALL})
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private UserEntity moderator;
 }

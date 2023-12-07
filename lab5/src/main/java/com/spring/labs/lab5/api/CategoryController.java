@@ -14,6 +14,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -64,7 +65,7 @@ public class CategoryController {
     @PutMapping("/{categoryId}")
     public ResponseEntity<ForumCategory> updateForumCategory(
             @Parameter(description = "Category ID to update", required = true)
-            @PathVariable Long categoryId,
+            @PathVariable @NotNull Long categoryId,
             @Valid @RequestBody CreateForumCategoryDto forumCategory) {
         ForumCategory updatedCategory = categoryService.update(categoryId, forumCategory);
         return new ResponseEntity<>(updatedCategory, HttpStatus.OK);
